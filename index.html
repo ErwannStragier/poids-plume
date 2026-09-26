@@ -487,6 +487,22 @@ select.set-in{text-align:left;appearance:auto;width:140px}
 .weigh{display:flex;align-items:center;justify-content:space-between;gap:10px;background:color-mix(in srgb,var(--yolk) 30%,var(--surface));border:1.5px solid color-mix(in srgb,var(--yolk) 60%,var(--line));border-radius:16px;padding:10px 12px;font-size:.88rem;font-weight:700}
 .tabbar button{position:relative}
 .tabbar button.dot::after{content:"";position:absolute;top:4px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 2px var(--paper)}
+
+/* Ouverture */
+#splash{position:fixed;inset:0;z-index:200;background:var(--paper);display:grid;place-content:center;justify-items:center;gap:18px;animation:spFail .4s 5.5s forwards}
+#splash .sp-logo{width:156px;height:156px;border-radius:36px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.18);will-change:transform}
+#splash .sp-word{font-family:var(--serif);font-style:italic;font-weight:700;font-size:2.2rem;color:var(--brand);letter-spacing:-.02em;opacity:0}
+#splash.play .sp-logo{animation:spIn 1s cubic-bezier(.2,1.3,.4,1) both}
+#splash.play .sp-dot{transform-box:fill-box;transform-origin:center;animation:spDrop 1.05s .75s cubic-bezier(.3,1.45,.5,1) both}
+#splash.play .sp-word{animation:spWord .8s 1.3s ease-out forwards}
+#splash.leave{background:transparent;transition:background .95s ease}
+#splash.leave .sp-word{animation:spWordOut .45s ease-in forwards}
+#splash.leave .sp-logo{box-shadow:none;transition:box-shadow .3s}
+@keyframes spIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes spDrop{0%{transform:translateY(-260%);opacity:0}40%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes spWord{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes spWordOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes spFail{to{opacity:0;visibility:hidden;pointer-events:none}}
 /* ---------- Animations ---------- */
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -522,6 +538,18 @@ button:active:not(:disabled){transform:scale(.96)}
 </head>
 <body>
 
+<div id="splash" aria-hidden="true">
+  <svg class="sp-logo" viewBox="0 0 512 512" aria-hidden="true">
+    <rect width="512" height="512" rx="112" fill="#FBF6F0"/>
+    <g transform="translate(6 4)">
+      <path d="M96 416 L96 300 C 110 196, 250 112, 424 84 C 418 170, 412 236, 412 300 L412 376 Q412 416 372 416 Z" fill="#7A1F2B"/>
+      <polygon points="116,410 102,396 418,90" fill="#FBF6F0"/>
+      <g fill="#FBF6F0"><polygon points="226,286 186,440 206,440"/><polygon points="290,222 282,440 302,440"/><polygon points="354,158 380,440 400,440"/><polygon points="104,226 116,250 238,266"/></g>
+      <g class="sp-dot"><circle cx="112" cy="400" r="46" fill="#FBF6F0"/><circle cx="112" cy="400" r="34" fill="#E3923A"/></g>
+    </g>
+  </svg>
+  <span class="sp-word">poids plume</span>
+</div>
 <div class="app">
   <header class="top">
     <div class="brand">
@@ -883,7 +911,7 @@ function fmtQty(id, q, shop){
 }
 
 /* ---------- Stockage (base de l'appli si dispo, sinon ce téléphone) ---------- */
-const S = { poids:{entries:[{d:"2026-09-26",kg:65}]}, repas:{days:{}}, choix:{swaps:{}}, reglages:{budgetEur:50, pour2:true, theme:"auto", accent:"bordeaux", text:"normal", sound:false, anim:true, prenom:"", targetK:3300, targetP:150, volume:50, elle:"", devise:"aud", herOn:false, herK:1700, herP:110, herShow:true, goal:"masse", weighDay:0, avoid:[], hideShake:false, wake:true}, journal:{days:{}} };
+const S = { poids:{entries:[{d:"2026-09-26",kg:65}]}, repas:{days:{}}, choix:{swaps:{}}, reglages:{intro:true, budgetEur:50, pour2:true, theme:"auto", accent:"bordeaux", text:"normal", sound:false, anim:true, prenom:"", targetK:3300, targetP:150, volume:50, elle:"", devise:"aud", herOn:false, herK:1700, herP:110, herShow:true, goal:"masse", weighDay:0, avoid:[], hideShake:false, wake:true}, journal:{days:{}} };
 let db = null, dbOk = false; const queue = {};
 function lsGet(k){ try { return JSON.parse(localStorage.getItem("pp-"+k) || "null"); } catch(e) { return null; } }
 function lsSet(k,v){ try { localStorage.setItem("pp-"+k, JSON.stringify(v)); } catch(e) {} }
@@ -1350,6 +1378,7 @@ function openSettings(page){
         <div class="set-row"><span>Couleur<small>Change tout le thème de l'appli</small></span><div class="swatches" role="group" aria-label="Couleur">${Object.entries(ACCENTS).map(([k,a]) => `<button type="button" class="sw" data-set="accent" data-val="${k}" aria-pressed="${(r.accent||"bordeaux")===k}" aria-label="${a[0]}" style="--sw:${a[1]}"></button>`).join("")}</div></div>
         <div class="set-row"><span>Taille du texte</span>${seg("text",[["normal","Normal"],["grand","Grand"]], r.text||"normal")}</div>
         ${tog("sAnim","Animations","Transitions et effets à l'écran", r.anim!==false)}
+        ${tog("sIntro","Animation d'ouverture","Le logo en grand quand tu lances l'appli", r.intro!==false)}
       </div>`;
     if(page === "sons") body = `
       <div class="set-card">
@@ -1436,6 +1465,7 @@ function openSettings(page){
     sh.querySelectorAll(`[data-set="${k}"]`).forEach(x => x.setAttribute("aria-pressed", String(x===b)));
   }));
   on("#sAnim","change", e => { setPref({anim:e.target.checked}); sfx("toggle"); });
+  on("#sIntro","change", e => { setPref({intro:e.target.checked}); sfx("toggle"); });
   on("#sSound","change", e => { setPref({sound:e.target.checked}); $("#volRow").hidden = !e.target.checked; if(e.target.checked) sfx("meal", true); });
   on("#sVol","change", e => { setPref({volume:Number(e.target.value)}); sfx("meal", true); });
   on("#sName","change", e => setPref({prenom:e.target.value.trim().slice(0,20)}));
@@ -1653,7 +1683,28 @@ if(["jour","recettes","courses","poids","prep"].includes(h)) show(h);
 function renderPlanViews(){ document.querySelectorAll("[data-nav]").forEach(n => n.innerHTML = weekNav()); renderDays(); renderDay(); renderShop(); renderPrep(); renderRecipes(); }
 function renderAll(){ applyPrefs(); $("#pour2").checked = !!S.reglages.pour2; renderPlanViews(); renderWeight(); }
 let firstPaint = true;
+/* ---------- Animation d'ouverture ---------- */
+function runSplash(){
+  const sp = document.getElementById("splash"); if(!sp) return;
+  let done = false;
+  const finish = () => { if(done) return; done = true; sp.remove(); const hl = document.querySelector("header .logo"); if(hl) hl.style.opacity = ""; const v = document.querySelector(".view:not([hidden])"); if(v) replay(v, "viewin"); };
+  if(S.reglages.intro === false || reduced()){ finish(); return; }
+  sp.classList.add("play");
+  sp.addEventListener("click", finish);
+  const hl = document.querySelector("header .logo"); if(hl) hl.style.opacity = "0";
+  setTimeout(() => {
+    if(done) return;
+    const big = sp.querySelector(".sp-logo"), a = big.getBoundingClientRect(), b = hl ? hl.getBoundingClientRect() : null;
+    sp.classList.add("leave");
+    if(b && big.animate){
+      const dx = (b.left + b.width/2) - (a.left + a.width/2), dy = (b.top + b.height/2) - (a.top + a.height/2), sc = b.width / a.width;
+      big.animate([{transform:"none", borderRadius:"0"},{transform:`translate(${dx}px,${dy}px) scale(${sc})`}], {duration:1050, easing:"cubic-bezier(.65,0,.25,1)", fill:"forwards"});
+    }
+    setTimeout(finish, 1080);
+  }, 2500);
+}
 load().then(() => { enter = false; });
+runSplash();
 setTimeout(() => { enter = false; }, 1200);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
