@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Poids plume</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Poids plume">
+<meta name="theme-color" content="#FBF6F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17100F" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0;padding-top:env(safe-area-inset-top,0px)!important}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#FBF6F0; --surface:#FFFFFF; --ink:#241817; --muted:#6E5B57; --line:#EBDFD6;
+  --brand:#7A1F2B; --on-brand:#FFFFFF;
+  --yolk:#EBA844; --coral:#E0724F; --rose:#F0B9B2; --sage:#A9BF93;
+  --chip-ink:#241817; --scrim:rgba(36,24,23,.45);
+  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#17100F; --surface:#221818; --ink:#F5ECE6; --muted:#B9A8A2; --line:#3A2B2A;
+    --brand:#9E3242; --yolk:#F0B456; --coral:#EA8363; --rose:#F2C2BC; --sage:#B6CBA1; --scrim:rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#17100F; --surface:#221818; --ink:#F5ECE6; --muted:#B9A8A2; --line:#3A2B2A;
+  --brand:#9E3242; --yolk:#F0B456; --coral:#EA8363; --rose:#F2C2BC; --sage:#B6CBA1; --scrim:rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 calc(96px + env(safe-area-inset-bottom,0px))}
+body.lock{overflow:hidden}
+.app{max-width:640px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+.k-matin{--c:var(--yolk)} .k-midi{--c:var(--coral)} .k-shake{--c:var(--rose)} .k-soir{--c:var(--sage)}
+
+/* Header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px 8px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:40px;height:40px;border-radius:11px;flex:none;box-shadow:0 0 0 1px var(--line)}
+.wordmark{white-space:nowrap;font-family:var(--serif);font-style:italic;font-weight:700;font-size:1.6rem;letter-spacing:-.02em;line-height:1;color:var(--brand)}
+.date{font-size:.82rem;color:var(--muted);font-weight:600;text-align:right}
+
+/* Views */
+.view{display:grid;gap:18px;padding-top:8px}
+.view[hidden]{display:none!important}
+.v-title{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.v-sub{color:var(--muted);font-size:.95rem}
+
+/* Day strip */
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.days button{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 0 7px;display:grid;justify-items:center;gap:1px;cursor:pointer}
+.days b{font-family:var(--display);font-weight:800;font-size:1.05rem}
+.days span{font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.days button.is-today span{color:var(--brand)}
+.days button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.days button[aria-pressed="true"] span{color:var(--on-brand);opacity:.85}
+
+/* Summary card */
+.summary{background:var(--brand);color:var(--on-brand);border-radius:26px;padding:20px;display:grid;gap:14px;position:relative;overflow:hidden}
+.summary::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:var(--rose);opacity:.25}
+.summary > *{position:relative}
+.summary .dname{font-family:var(--serif);font-style:italic;font-weight:700;font-size:2.4rem;line-height:1}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{display:grid;gap:6px}
+.stat b{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1}
+.stat small{font-size:.78rem;opacity:.85;font-weight:600}
+.meter{height:8px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:999px;background:var(--yolk)}
+
+/* Timeline */
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:10px;position:relative}
+.timeline::before{content:"";position:absolute;left:21px;top:22px;bottom:22px;width:2px;background:var(--line)}
+.tl{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:stretch;position:relative}
+.tl .dot{width:44px;height:44px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--chip-ink);align-self:center}
+.meal{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:20px;padding:12px 14px;display:grid;gap:4px;cursor:pointer;transition:transform .15s,border-color .15s}
+.meal:hover{border-color:var(--c);transform:translateY(-1px)}
+.meal .when{font-size:.75rem;font-weight:700;color:var(--muted)}
+.meal .name{font-family:var(--display);font-weight:800;font-size:1.12rem;line-height:1.15}
+.meal .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:.78rem;font-weight:700}
+.meal .meta span{background:color-mix(in srgb,var(--c) 28%,var(--surface));border-radius:999px;padding:2px 9px}
+.meal .go{font-size:.78rem;font-weight:700;color:var(--brand)}
+
+/* Recipes list */
+.filters{display:flex;gap:6px;overflow-x:auto;margin-inline:-16px;padding-inline:16px;padding-block:2px}
+.filters button{flex:none;font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.filters button i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--ink))}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rtile{text-align:left;border:0;border-radius:22px;padding:14px;background:var(--c);color:var(--chip-ink);display:grid;gap:10px;align-content:space-between;min-height:150px;cursor:pointer;transition:transform .15s}
+.rtile:hover{transform:translateY(-2px)}
+.rtile .kind{font-size:.68rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.rtile .name{font-family:var(--display);font-weight:800;font-size:1.05rem;line-height:1.15}
+.rtile .meta{font-size:.78rem;font-weight:700;display:flex;flex-wrap:wrap;gap:4px}
+.rtile .meta span{background:rgba(255,255,255,.55);border-radius:999px;padding:1px 8px}
+
+/* Courses */
+.shopbar{background:var(--brand);color:var(--on-brand);border-radius:22px;padding:16px;display:grid;gap:10px}
+.shoprow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.shoprow b{font-family:var(--display);font-weight:800;font-size:1.2rem}
+.shopbar .meter i{background:linear-gradient(90deg,var(--yolk),var(--coral),var(--rose),var(--sage));transition:width .3s}
+.ghost{font-weight:700;font-size:.82rem;padding:6px 12px;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);background:transparent;color:var(--on-brand);cursor:pointer}
+.aisle{display:grid;gap:4px}
+.aisle h3{font-size:1rem;display:flex;align-items:center;gap:8px;padding-block:4px}
+.aisle h3 i{width:12px;height:12px;border-radius:4px;background:var(--c)}
+.aisle ul{list-style:none;margin:0;padding:0;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+.aisle li + li{border-top:1px solid var(--line)}
+.aisle label{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:start;padding:11px 14px;cursor:pointer;font-size:.94rem}
+.aisle input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--brand)}
+.aisle .en{display:block;font-size:.78rem;color:var(--muted)}
+.aisle .qty{font-weight:600;font-size:.85rem;white-space:nowrap}
+.aisle input:checked ~ .it{text-decoration:line-through;color:var(--muted)}
+
+/* Prep */
+.steps-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.sess{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.sess .n{grid-row:span 3;width:40px;height:40px;border-radius:12px;background:var(--c);display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--chip-ink)}
+.sess .when{font-size:.78rem;font-weight:700;color:var(--muted)}
+.sess ul{margin:4px 0 0;padding-left:1.1em;font-size:.92rem;display:grid;gap:3px}
+.tips{display:grid;gap:8px}
+.tip{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:2px}
+.tip b{font-family:var(--display);font-weight:800;color:var(--brand)}
+.tip span{font-size:.92rem}
+
+/* Bottom nav */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.tabbar nav{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.tabbar button{border:0;background:transparent;border-radius:14px;padding:6px 0;display:grid;justify-items:center;gap:2px;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer}
+.tabbar svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-current="page"]{color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,transparent)}
+
+/* Sheet */
+.sheet-wrap{position:fixed;inset:0;z-index:30;display:grid;align-items:end;justify-items:center}
+.sheet-wrap[hidden]{display:none!important}
+.scrim{position:absolute;inset:0;background:var(--scrim);border:0}
+.sheet{position:relative;width:100%;max-width:640px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:26px 26px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.sheet-head{background:var(--c);color:var(--chip-ink);padding:14px 18px 18px;display:grid;gap:8px;position:sticky;top:0}
+.grab{justify-self:center;width:44px;height:5px;border-radius:999px;background:rgba(36,24,23,.25)}
+.sheet-head .row{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.sheet-head .kind{font-size:.72rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.sheet-head h2{font-size:1.6rem;font-weight:800;letter-spacing:-.01em}
+.close{border:0;background:rgba(255,255,255,.6);width:36px;height:36px;border-radius:50%;font-size:1.2rem;font-weight:700;cursor:pointer;color:var(--chip-ink);flex:none}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:.8rem;font-weight:700;border-radius:999px;padding:3px 10px;background:rgba(255,255,255,.6);color:var(--chip-ink)}
+.pill.dark{background:var(--chip-ink);color:#fff}
+.sheet-body{padding:16px 18px;display:grid;gap:16px}
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.tool{font-size:.75rem;font-weight:600;color:var(--muted);border:1.5px dashed var(--line);border-radius:8px;padding:2px 8px}
+.sheet-body h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ing{list-style:none;margin:0;padding:0;font-size:.95rem}
+.ing li{display:grid;grid-template-columns:1fr auto;gap:10px;border-bottom:1px solid var(--line);padding-block:6px}
+.ing li span:last-child{font-weight:600;text-align:right}
+.rsteps{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:.95rem;counter-reset:s}
+.rsteps li{display:grid;grid-template-columns:28px 1fr;gap:10px;counter-increment:s}
+.rsteps li::before{content:counter(s);width:26px;height:26px;border-radius:50%;background:var(--c);color:var(--chip-ink);font-weight:800;font-size:.8rem;display:grid;place-items:center}
+.note{font-size:.88rem;background:color-mix(in srgb,var(--c) 20%,var(--surface));border-radius:14px;padding:10px 12px}
+/* Meal card actions */
+.meal{cursor:default;padding:0;overflow:hidden}
+.meal .open{all:unset;display:grid;gap:4px;padding:12px 14px 8px;cursor:pointer}
+.meal .open:focus-visible{outline:3px solid var(--brand);outline-offset:-3px}
+.acts{display:flex;gap:6px;padding:0 10px 10px 14px}
+.act{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.act:hover{border-color:var(--c)}
+.act.done{background:var(--c);border-color:var(--c);color:var(--chip-ink)}
+.act svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tl.eaten .dot{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--c)}
+.tl.eaten .name{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--c)}
+.swapped{font-size:.7rem;font-weight:800;color:var(--brand);letter-spacing:.04em;text-transform:uppercase}
+.eatrow{display:grid;gap:6px;background:rgba(255,255,255,.12);border-radius:16px;padding:10px 12px}
+.eatrow .l{display:flex;justify-content:space-between;font-size:.82rem;font-weight:700}
+
+/* Options sheet */
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 14px;display:grid;gap:3px;cursor:pointer}
+.opt[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 2px var(--c)}
+.opt .name{font-family:var(--display);font-weight:800;font-size:1.05rem}
+.opt .meta{font-size:.8rem;color:var(--muted);font-weight:600}
+.opt .tag{justify-self:start;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:var(--c);color:var(--chip-ink);border-radius:6px;padding:1px 6px}
+.linkbtn{border:0;background:none;color:var(--brand);font-weight:700;cursor:pointer;padding:4px 0;justify-self:start}
+
+/* Prices & budget */
+.aisle .qty{display:grid;justify-items:end;gap:0}
+.aisle .price{font-weight:800}
+.aisle .price.est{color:var(--muted);font-weight:700}
+.budget{background:var(--surface);border:1.5px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:12px}
+.budget .big{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.budget .big b{font-family:var(--display);font-weight:800;font-size:2rem;line-height:1}
+.budget .big span{font-size:.85rem;color:var(--muted);font-weight:600}
+.bmeter{height:12px;border-radius:999px;background:var(--line);overflow:hidden}
+.bmeter i{display:block;height:100%;border-radius:999px;background:var(--sage)}
+.bmeter.over i{background:var(--coral)}
+.bline{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;font-weight:600;flex-wrap:wrap}
+.bline .warn{color:var(--coral);font-weight:800}
+.bset{display:flex;align-items:center;gap:8px;font-size:.88rem;font-weight:600;flex-wrap:wrap}
+.bset input{width:84px;font:inherit;font-weight:700;padding:6px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink)}
+.small{font-size:.8rem;color:var(--muted)}
+
+/* Weight */
+.wform{background:var(--brand);color:var(--on-brand);border-radius:24px;padding:16px;display:grid;gap:12px}
+.wform .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:8px;align-items:end}
+.wform .row .save{grid-column:1/-1}
+.wform label{display:grid;gap:4px;font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.wform input{font:inherit;font-size:1.05rem;font-weight:700;padding:9px 10px;border-radius:12px;border:0;background:rgba(255,255,255,.95);color:#241817;width:100%;min-width:0}
+.wform .save{border:0;border-radius:12px;padding:11px 16px;background:var(--yolk);color:var(--chip-ink);font-weight:800;cursor:pointer}
+.wstatus{font-size:.85rem;font-weight:600;min-height:1.2em}
+.wstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wstat{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:12px;display:grid;gap:2px}
+.wstat b{font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.1;white-space:nowrap}
+.wstat span{font-size:.75rem;color:var(--muted);font-weight:600}
+.verdict{border-radius:18px;padding:12px 14px;font-size:.92rem;font-weight:600;background:color-mix(in srgb,var(--c) 30%,var(--surface))}
+.chart{background:var(--surface);border:1.5px solid var(--line);border-radius:22px;padding:12px 10px 8px}
+.chart svg{width:100%;height:auto;display:block}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .axis{fill:var(--muted);font-size:14px;font-family:var(--body);font-weight:600}
+.chart .band{fill:var(--sage);opacity:.35}
+.chart .line{stroke:var(--brand);stroke-width:3;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .pt{fill:var(--brand);stroke:var(--surface);stroke-width:2}
+.legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted);font-weight:600;padding:6px 6px 0;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.wlist{list-style:none;margin:0;padding:0;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+.wlist li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 14px}
+.wlist li + li{border-top:1px solid var(--line)}
+.wlist .d{font-weight:600}
+.wlist .k{font-weight:800}
+.wlist button{border:0;background:none;color:var(--muted);font-size:1.1rem;cursor:pointer;width:32px;height:32px;border-radius:50%}
+.wlist button:hover{background:var(--paper);color:var(--coral)}
+.empty{color:var(--muted);font-size:.92rem;padding:14px;text-align:center}
+.tabbar nav{grid-template-columns:repeat(5,1fr)}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 512 512" aria-hidden="true">
+        <rect width="512" height="512" rx="112" fill="#FBF6F0"/>
+        <g transform="translate(6 4)">
+          <path d="M96 416 L96 300 C 110 196, 250 112, 424 84 C 418 170, 412 236, 412 300 L412 376 Q412 416 372 416 Z" fill="#7A1F2B"/>
+          <polygon points="116,410 102,396 418,90" fill="#FBF6F0"/>
+          <g fill="#FBF6F0">
+            <polygon points="226,286 186,440 206,440"/>
+            <polygon points="290,222 282,440 302,440"/>
+            <polygon points="354,158 380,440 400,440"/>
+            <polygon points="104,226 116,250 238,266"/>
+          </g>
+          <circle cx="112" cy="400" r="46" fill="#FBF6F0"/>
+          <circle cx="112" cy="400" r="34" fill="#E3923A"/>
+        </g>
+      </svg>
+      <span class="wordmark">poids plume</span>
+    </div>
+    <span class="date" id="date"></span>
+  </header>
+
+  <!-- JOUR -->
+  <section class="view" id="v-jour" aria-label="Journée">
+    <div class="days" id="days" role="group" aria-label="Choisir le jour"></div>
+    <div class="summary" id="summary"></div>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <!-- RECETTES -->
+  <section class="view" id="v-recettes" aria-label="Recettes" hidden>
+    <div><h1 class="v-title">Recettes</h1><p class="v-sub">Le plan de base et les recettes de rechange. Poids crus ou secs. Touche une carte pour l'ouvrir.</p></div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrer">
+      <button type="button" data-f="all" aria-pressed="true">Toutes</button>
+      <button type="button" data-f="matin" class="k-matin" aria-pressed="false"><i></i>Petit-déj</button>
+      <button type="button" data-f="midi" class="k-midi" aria-pressed="false"><i></i>Déjeuner</button>
+      <button type="button" data-f="shake" class="k-shake" aria-pressed="false"><i></i>Shake</button>
+      <button type="button" data-f="soir" class="k-soir" aria-pressed="false"><i></i>Dîner</button>
+    </div>
+    <div class="rgrid" id="rgrid"></div>
+  </section>
+
+  <!-- COURSES -->
+  <section class="view" id="v-courses" aria-label="Courses" hidden>
+    <div><h1 class="v-title">Courses</h1><p class="v-sub">Le plan de base pour 1 personne. Noms en anglais comme sur les étiquettes.</p></div>
+    <div class="budget" id="budget"></div>
+    <div class="shopbar">
+      <div class="shoprow"><b class="num" id="progress">0 / 0</b><button class="ghost" id="reset" type="button">Tout décocher</button></div>
+      <div class="meter"><i id="barfill" style="width:0"></i></div>
+    </div>
+    <div id="shop" style="display:grid;gap:16px"></div>
+    <p class="small">Prix Aldi relevés sur aldi.com.au le 27 septembre 2026. Un « ~ » veut dire prix estimé (produit non affiché en ligne). Les prix changent avec les promos, et Coles ou Woolworths peuvent être un peu plus chers.</p>
+  </section>
+
+  <!-- POIDS -->
+  <section class="view" id="v-poids" aria-label="Suivi du poids" hidden>
+    <div><h1 class="v-title">Poids</h1><p class="v-sub">Pèse-toi 1 fois par semaine, le même jour, le matin à jeun.</p></div>
+    <form class="wform" id="wform">
+      <div class="row">
+        <label for="wkg">Poids (kg)<input id="wkg" type="number" inputmode="decimal" step="0.1" min="30" max="200" placeholder="65,0" required></label>
+        <label for="wdate">Date<input id="wdate" type="date" required></label>
+        <button class="save" type="submit">Noter</button>
+      </div>
+      <div class="wstatus" id="wstatus" role="status"></div>
+    </form>
+    <div id="wbody" style="display:grid;gap:14px"></div>
+  </section>
+
+  <!-- PREP -->
+  <section class="view" id="v-prep" aria-label="Meal prep" hidden>
+    <div><h1 class="v-title">Meal prep</h1><p class="v-sub">3 sessions pour une poêle et une casserole. Prévois environ 10 boîtes qui passent au micro-ondes.</p></div>
+    <ol class="steps-list" id="sessions"></ol>
+    <h2 style="font-size:1.4rem;font-weight:800">Conseils</h2>
+    <div class="tips">
+      <div class="tip"><b>Tu stagnes ?</b><span>Rien après 2 semaines : +200 à 300 kcal (30 g de beurre de cacahuète en plus dans le shake).</span></div>
+      <div class="tip"><b>Trop vite ?</b><span>Plus de 0,5 kg par semaine sur la durée : retire environ 200 kcal (moins de miel et de beurre de cacahuète).</span></div>
+      <div class="tip"><b>Muscu</b><span>3 séances par semaine en augmentant les charges. Sans ça, le surplus part surtout en gras.</span></div>
+      <div class="tip"><b>Eau</b><span>2,5 à 3 L par jour, plus quand tu bosses au soleil.</span></div>
+      <div class="tip"><b>Sécurité</b><span>Repas cuisinés : 3 jours max au frigo. Le reste au congélateur, décongelé au frigo la veille.</span></div>
+    </div>
+    <p class="v-sub" style="font-size:.82rem">Calories estimées avec des valeurs nutritionnelles moyennes. C'est la balance qui dit s'il faut ajuster.</p>
+  </section>
+</div>
+
+<div class="tabbar">
+  <nav aria-label="Navigation">
+    <button type="button" data-v="jour" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Jour</button>
+    <button type="button" data-v="recettes"><svg viewBox="0 0 24 24"><path d="M5 3v8a3 3 0 0 0 3 3v7M8 3v8M11 3v8a3 3 0 0 1-3 3"/><path d="M17 21V3c-2 1-3 4-3 7s1 4 3 4"/></svg>Recettes</button>
+    <button type="button" data-v="courses"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg>Courses</button>
+    <button type="button" data-v="poids"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg>Poids</button>
+    <button type="button" data-v="prep"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Prep</button>
+  </nav>
+</div>
+
+<div class="sheet-wrap" id="sheetWrap" hidden>
+  <button class="scrim" id="scrim" type="button" aria-label="Fermer"></button>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<script>
+/* ---------- Données ---------- */
+const R = {
+  porridge:{t:"matin",kind:"Petit-déjeuner",name:"Porridge banane & beurre de cacahuète",kcal:900,p:31,time:"5 min",serv:"1 portion",
+    tools:["Casserole","ou micro-ondes"],
+    ing:[["Flocons d'avoine","100 g"],["Lait entier","300 ml"],["Banane","1"],["Beurre de cacahuète","30 g"],["Miel","1 c. à soupe"]],
+    steps:["Mets l'avoine et le lait dans la casserole, feu moyen, 3–4 min en remuant. Au micro-ondes : 2 min 30 dans un grand bol, en remuant à mi-cuisson.","Ajoute la banane en rondelles, le beurre de cacahuète et le miel."],
+    note:"Version sans cuisson : mélange avoine et lait la veille dans une boîte, frigo, garnis le matin."},
+  oeufs:{t:"matin",kind:"Petit-déjeuner",name:"Œufs brouillés, toasts & avocat",kcal:815,p:38,time:"8 min",serv:"1 portion",
+    tools:["Poêle","Grille-pain"],
+    ing:[["Œufs","4"],["Pain complet","3 tranches"],["Beurre","20 g"],["Avocat","½"],["Sel, poivre",""]],
+    steps:["Lance les toasts dans le grille-pain.","Poêle feu doux avec la moitié du beurre, verse les œufs battus, remue sans arrêt 2–3 min. Retire quand ils sont encore un peu baveux.","Beurre les toasts, écrase l'avocat dessus, ajoute les œufs, sel et poivre."]},
+  shake:{t:"shake",kind:"Collation, tous les jours",name:"Shake maison",kcal:715,p:27,time:"2 min",serv:"1 portion",
+    tools:["Blender"],
+    ing:[["Lait entier","400 ml"],["Flocons d'avoine","60 g"],["Banane","1"],["Beurre de cacahuète","20 g"]],
+    steps:["Mets tout dans le blender, avoine en premier, mixe 30–40 secondes.","Verse dans ton shaker et garde-le au frais (glacière ou frigo) jusqu'à l'après-midi."],
+    note:"Option : 1 dose de whey (30 g) en plus = +120 kcal et +24 g de protéines."},
+  poulet:{t:"midi",kind:"Déjeuner · batch de 3",name:"Poulet, riz & légumes",kcal:870,p:47,time:"30 min",serv:"3 boîtes · lun–mer",
+    tools:["Casserole","Poêle","Micro-ondes"],
+    ing:[["Hauts de cuisse de poulet sans peau","540 g"],["Riz blanc","360 g"],["Légumes surgelés","450 g"],["Huile d'olive","2 c. à soupe"],["Sauce sweet chilli ou teriyaki","4 c. à soupe"],["Sel, poivre, paprika",""]],
+    steps:["Casserole : riz dans 2 fois son volume d'eau salée, couvercle, feu doux 12–15 min, puis 5 min hors du feu.","Pendant ce temps, poêle : poulet en dés dans l'huile, feu vif, 8–10 min jusqu'à ce qu'il soit bien doré et cuit à cœur.","Ajoute les légumes surgelés 5 min, puis la sauce, 1 min.","Répartis dans 3 boîtes, laisse tiédir, frigo."],
+    note:"Réchauffage : 2–3 min au micro-ondes avec une cuillère d'eau sur le riz."},
+  bolo:{t:"midi",kind:"Déjeuner · batch de 4",name:"Pâtes bolognaise",kcal:940,p:49,time:"35 min",serv:"4 boîtes · jeu–dim",
+    tools:["Casserole","Poêle","Micro-ondes"],
+    ing:[["Bœuf haché","600 g"],["Pâtes","480 g"],["Passata","600 g"],["Oignon","1"],["Carottes","2"],["Fromage râpé","80 g"],["Herbes italiennes, sel, poivre",""]],
+    steps:["Poêle : oignon émincé et carottes râpées 4 min, puis la viande, 6–8 min en l'émiettant jusqu'à ce qu'elle ne soit plus rose.","Ajoute la passata et les herbes, couvre à moitié, 15 min à feu doux.","Casserole : cuis les pâtes selon le paquet, égoutte.","Mélange, répartis dans 4 boîtes, fromage par-dessus. 2 au frigo, 2 au congélateur."]},
+  wrap:{t:"soir",kind:"Dîner",name:"Wraps poulet, pois chiches & feta",kcal:890,p:63,time:"15 min",serv:"2 wraps",
+    tools:["Poêle"],
+    ing:[["Grandes tortillas de blé","2"],["Blanc de poulet","150 g"],["Pois chiches (boîte, égouttés)","100 g"],["Feta","40 g"],["Tomate","1"],["Salade","1 poignée"],["Tzatziki","50 g"],["Huile","1 c. à café"],["Paprika, cumin",""]],
+    steps:["Poêle : poulet en lanières avec l'huile et les épices, 6–8 min.","Ajoute les pois chiches 2 min pour les chauffer, puis sors tout de la poêle.","Garnis les tortillas : tzatziki, salade, tomate, poulet, pois chiches, feta émiettée. Roule serré.","Remets les wraps dans la poêle sèche, 1 min de chaque côté pour les dorer."],
+    note:"C'est le wrap de ton ancienne appli, avec du poulet en plus : presque 2 fois plus de protéines."},
+  chili:{t:"soir",kind:"Dîner · batch de 3",name:"Chili con carne & riz",kcal:1000,p:51,time:"35 min",serv:"3 portions · mar, mer, sam",
+    tools:["Casserole","Poêle"],
+    ing:[["Bœuf haché","400 g"],["Haricots rouges (boîtes)","2"],["Passata","450 g"],["Oignon","1"],["Épices taco ou chili","1 sachet"],["Riz blanc","300 g"],["Fromage râpé","90 g"]],
+    steps:["Casserole : lance le riz (même méthode que le poulet-riz).","Poêle : oignon 3 min, puis la viande 6–8 min, puis les épices 1 min.","Ajoute la passata et les haricots rincés, 20 min à feu doux en remuant de temps en temps.","Sers sur le riz avec le fromage. 1 portion au frigo pour mercredi, 1 au congélateur pour samedi."]},
+  thon:{t:"soir",kind:"Dîner",name:"Pâtes au thon & tomate",kcal:845,p:55,time:"15 min",serv:"1 portion",
+    tools:["Casserole","Poêle"],
+    ing:[["Pâtes","120 g"],["Thon en boîte, égoutté","185 g"],["Passata","150 g"],["Huile d'olive","1 c. à soupe"],["Fromage râpé","20 g"],["Ail ou herbes",""]],
+    steps:["Casserole : cuis les pâtes.","Poêle : huile et ail 1 min, passata 5 min, puis le thon émietté 2 min.","Mélange avec les pâtes, fromage dessus."]},
+  wok:{t:"soir",kind:"Dîner",name:"Wok poulet & nouilles",kcal:800,p:45,time:"15 min",serv:"1 portion",
+    tools:["Casserole","Poêle"],
+    ing:[["Nouilles aux œufs","100 g"],["Hauts de cuisse de poulet","150 g"],["Légumes surgelés (stir-fry)","150 g"],["Huile","1 c. à soupe"],["Sauce soja","2 c. à soupe"],["Miel","1 c. à soupe"]],
+    steps:["Casserole : cuis les nouilles 3–4 min, égoutte.","Poêle bien chaude : poulet en lanières dans l'huile 6–8 min.","Ajoute les légumes 4 min, puis les nouilles, la sauce soja et le miel. Saute 1–2 min."]},
+
+  /* Recettes de rechange */
+  toasts:{alt:true,t:"matin",kind:"Petit-déjeuner · rechange",name:"Toasts beurre de cacahuète, banane & lait",kcal:855,p:33,time:"3 min",serv:"1 portion",
+    tools:["Grille-pain"],
+    ing:[["Pain complet","3 tranches"],["Beurre de cacahuète","40 g"],["Banane","1"],["Lait entier","400 ml"]],
+    steps:["Toaste le pain.","Tartine le beurre de cacahuète, ajoute la banane en rondelles.","Bois le grand verre de lait avec."],
+    note:"Le plus rapide des petits-déj, parfait quand tu pars tôt sur le chantier."},
+  omelette:{alt:true,t:"matin",kind:"Petit-déjeuner · rechange",name:"Omelette fromage en wrap",kcal:835,p:46,time:"8 min",serv:"1 portion",
+    tools:["Poêle"],
+    ing:[["Œufs","4"],["Fromage râpé","30 g"],["Grande tortilla de blé","1"],["Beurre","10 g"],["Lait entier","250 ml"]],
+    steps:["Bats les œufs avec le fromage, sel, poivre.","Poêle feu moyen avec le beurre, verse les œufs, 2–3 min.","Pose la tortilla sur l'omelette 30 secondes, retourne le tout, plie en deux.","Bois le verre de lait avec."]},
+  riz_thon:{alt:true,t:"midi",kind:"Déjeuner · rechange",name:"Riz sauté aux œufs & thon",kcal:1000,p:62,time:"20 min",serv:"1 boîte",
+    tools:["Casserole","Poêle","Micro-ondes"],
+    ing:[["Riz blanc","120 g"],["Œufs","3"],["Thon en boîte, égoutté","185 g"],["Légumes surgelés","150 g"],["Huile","1 c. à soupe"],["Sauce soja","2 c. à soupe"]],
+    steps:["Casserole : cuis le riz (ou prends un reste de riz froid, c'est encore meilleur).","Poêle : huile et légumes 4 min, pousse-les sur le côté et brouille les œufs.","Ajoute le riz, le thon et la sauce soja, saute 3 min. Mets en boîte."],
+    note:"Très économique et le plus riche en protéines des déjeuners."},
+  pates_poulet:{alt:true,t:"midi",kind:"Déjeuner · rechange",name:"Pâtes poulet, tomate & fromage",kcal:870,p:55,time:"20 min",serv:"1 boîte",
+    tools:["Casserole","Poêle","Micro-ondes"],
+    ing:[["Pâtes","120 g"],["Hauts de cuisse de poulet","150 g"],["Passata","150 g"],["Fromage râpé","30 g"],["Huile","1 c. à café"],["Herbes italiennes",""]],
+    steps:["Casserole : cuis les pâtes.","Poêle : poulet en dés dans l'huile 8 min, puis passata et herbes 5 min.","Mélange avec les pâtes, fromage dessus, mets en boîte."]},
+  shake_choco:{alt:true,t:"shake",kind:"Collation · rechange",name:"Shake choco-cacahuète",kcal:810,p:29,time:"2 min",serv:"1 portion",
+    tools:["Blender"],
+    ing:[["Lait entier","400 ml"],["Flocons d'avoine","60 g"],["Banane","1"],["Beurre de cacahuète","20 g"],["Cacao en poudre non sucré","1 c. à soupe"],["Miel","1 c. à soupe"]],
+    steps:["Mets tout dans le blender, avoine en premier, mixe 30–40 secondes.","Verse dans ton shaker, garde-le au frais."]},
+  quesadillas:{alt:true,t:"soir",kind:"Dîner · rechange",name:"Quesadillas poulet & haricots",kcal:830,p:59,time:"15 min",serv:"2 quesadillas",
+    tools:["Poêle"],
+    ing:[["Grandes tortillas de blé","2"],["Blanc de poulet","120 g"],["Haricots rouges, égouttés","100 g"],["Fromage râpé","50 g"],["Passata","2 c. à soupe"],["Épices taco","1 c. à café"]],
+    steps:["Poêle : poulet en petits dés avec les épices, 6 min. Sors-le.","Écrase grossièrement les haricots avec la passata.","Sur une moitié de chaque tortilla : haricots, poulet, fromage. Plie en deux.","Poêle sèche, 2 min de chaque côté jusqu'à ce que le fromage fonde."]},
+  cantonais:{alt:true,t:"soir",kind:"Dîner · rechange",name:"Riz cantonais au poulet",kcal:910,p:48,time:"20 min",serv:"1 portion",
+    tools:["Casserole","Poêle"],
+    ing:[["Riz blanc","120 g"],["Hauts de cuisse de poulet","120 g"],["Œufs","2"],["Légumes surgelés","150 g"],["Huile","1 c. à soupe"],["Sauce soja","2 c. à soupe"]],
+    steps:["Casserole : cuis le riz.","Poêle : poulet en dés dans l'huile 7 min, puis les légumes 4 min.","Pousse sur le côté, brouille les œufs, ajoute le riz et la sauce soja, saute 3 min."]}
+};
+const ALTS = {matin:["toasts","omelette"], midi:["riz_thon","pates_poulet"], shake:["shake_choco"], soir:["quesadillas","cantonais"]};
+const WEEK = [
+  ["Lundi","porridge","poulet","wrap"],["Mardi","oeufs","poulet","chili"],["Mercredi","porridge","poulet","chili"],
+  ["Jeudi","oeufs","bolo","thon"],["Vendredi","porridge","bolo","wok"],["Samedi","oeufs","bolo","chili"],["Dimanche","porridge","bolo","wrap"]
+];
+const SLOTS = [["Matin","Avant le boulot","matin"],["Midi","Sur le chantier","midi"],["Shake","15–16 h","shake"],["Soir","Le soir","soir"]];
+/* [fr, en, quantité, prix AUD, estimé?] */
+const SHOP = [
+  ["Viandes, poisson, œufs","midi",[
+    ["Hauts de cuisse de poulet sans peau","chicken thigh fillets","750 g",11.99,0],
+    ["Blanc de poulet","chicken breast fillets","300 g",3.60,0],
+    ["Bœuf haché","2 Star beef mince 500 g","2 × 500 g",12.98,0],
+    ["Thon en boîte","tuna 185 g","1 boîte",2.29,0],
+    ["Œufs","cage eggs 700 g (12)","12",5.00,0]]],
+  ["Frais","shake",[
+    ["Lait entier","full cream milk 2 L","2 × 2 L",6.78,0],
+    ["Fromage râpé","grated tasty cheese 500 g","500 g",6.49,1],
+    ["Feta","fetta","180–200 g",4.29,0],
+    ["Tzatziki","tzatziki dip","200 g",2.99,1],
+    ["Beurre","butter 250 g","250 g",3.99,0]]],
+  ["Féculents & épicerie","matin",[
+    ["Flocons d'avoine","rolled oats 1.6 kg (2 semaines)","1,6 kg",6.49,0],
+    ["Riz blanc","long grain rice 2 kg","2 kg",3.59,0],
+    ["Pâtes","pasta 500 g","2 × 500 g",1.78,0],
+    ["Nouilles","hokkien noodles 450 g","1 paquet",2.29,0],
+    ["Grandes tortillas","large wraps","8",3.29,1],
+    ["Pain complet","wholemeal bread 650 g","1 paquet",2.59,0],
+    ["Beurre de cacahuète","peanut butter 375 g","375 g",3.49,1],
+    ["Passata","tomato passata 700 g","2 × 700 g",2.98,1],
+    ["Haricots rouges","red kidney beans 420 g","2 boîtes",1.78,0],
+    ["Pois chiches","chick peas 420 g","1 boîte",0.89,0],
+    ["Épices taco","taco seasoning","1 sachet",1.19,1]]],
+  ["Fruits & légumes","soir",[
+    ["Bananes","bananas (loose)","12",9.70,0],
+    ["Avocats","hass avocado","2",4.58,0],
+    ["Tomates","gourmet tomatoes (loose)","2",1.96,0],
+    ["Salade","iceberg salad mix 300 g","1 sachet",2.49,0],
+    ["Oignons","brown onions (loose)","2",1.26,0],
+    ["Carottes","carrots 1 kg","1 kg",2.09,0],
+    ["Légumes surgelés","frozen mixed vegetables 1 kg","1 kg",2.79,0]]],
+  ["Placard (une fois, puis ça dure)","matin",[
+    ["Huile d'olive","olive oil","",null,0],["Sauce soja","soy sauce","",null,0],["Sauce sweet chilli ou teriyaki","sweet chilli / teriyaki sauce","",null,0],
+    ["Miel","honey","",null,0],["Paprika, cumin, herbes, ail","spices","",null,0],["Boîtes hermétiques","containers","≈ 10",null,0]]]
+];
+const SESSIONS = [
+  ["Dimanche soir · ≈ 40 min","midi","Déjeuners lun → mer",["Casserole : riz pour 3 boîtes.","Poêle : poulet puis légumes et sauce.","3 boîtes au frigo."]],
+  ["Mardi soir · ≈ 40 min","soir","Dîners mar, mer, sam",["Casserole : riz. Poêle : chili.","Tu manges 1 portion.","1 au frigo (mercredi), 1 au congélateur (samedi, à sortir vendredi soir)."]],
+  ["Mercredi soir · ≈ 35 min","midi","Déjeuners jeu → dim",["Poêle : bolognaise. Casserole : pâtes.","4 boîtes : 2 au frigo (jeu, ven), 2 au congélateur (sam, dim).","Sors la boîte du lendemain au frigo chaque soir."]]
+];
+const TARGET_K = 3300, TARGET_P = 150, EUR_AUD = 1.62;
+
+/* ---------- Outils ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => n.toLocaleString("fr-FR");
+const money = n => n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2}) + " $";
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const parseIso = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const shortDate = s => parseIso(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+const now = new Date();
+const todayIdx = (now.getDay() + 6) % 7;
+const dayDate = i => { const d = new Date(now); d.setDate(now.getDate() - todayIdx + i); return d; };
+$("#date").textContent = now.toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"});
+
+/* ---------- Stockage (db de l'appli, sinon ce téléphone) ---------- */
+const S = { poids:{entries:[{d:"2026-09-26",kg:65}]}, repas:{days:{}}, choix:{swaps:{}}, reglages:{budgetEur:50} };
+let db = null, dbOk = false;
+const queue = {};
+function lsGet(k){ try { return JSON.parse(localStorage.getItem("pp-"+k) || "null"); } catch(e) { return null; } }
+function lsSet(k,v){ try { localStorage.setItem("pp-"+k, JSON.stringify(v)); } catch(e) {} }
+function save(k){
+  lsSet(k, S[k]);
+  if(!dbOk) return;
+  const body = JSON.parse(JSON.stringify(S[k]));
+  queue[k] = (queue[k] || Promise.resolve()).then(() => db.doc("suivi/"+k).set(body)).catch(e => {
+    if(e && e.code === "unavailable"){ return new Promise(r => setTimeout(r, 800 + Math.random()*800)).then(() => db.doc("suivi/"+k).set(body)).catch(()=>{}); }
+    if(e && (e.code === "invalid_argument" || e.code === "revoked" || e.code === "not_granted")) dbOk = false;
+  });
+}
+async function load(){
+  for(const k of Object.keys(S)){ const v = lsGet(k); if(v) S[k] = Object.assign(S[k], v); }
+  renderAll();
+  try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch(e) { db = null; }
+  if(!db) return;
+  try {
+    const snaps = await Promise.all(Object.keys(S).map(k => db.doc("suivi/"+k).get()));
+    Object.keys(S).forEach((k,i) => { if(snaps[i].exists) S[k] = Object.assign(S[k], snaps[i].data()); });
+    dbOk = true;
+    renderAll();
+  } catch(e) { dbOk = false; }
+}
+
+/* ---------- Jour ---------- */
+let dayIdx = todayIdx;
+const slotKey = (d,s) => `${d}-${s}`;
+const recipeFor = (d,s) => (S.choix.swaps || {})[slotKey(d,s)] || (s===2 ? "shake" : WEEK[d][s===3?3:s+1]);
+const baseFor = (d,s) => s===2 ? "shake" : WEEK[d][s===3?3:s+1];
+function eatenList(d){ return (S.repas.days || {})[iso(dayDate(d))] || []; }
+
+function renderDays(){
+  $("#days").innerHTML = WEEK.map(([d],i) => `<button type="button" data-i="${i}" class="${i===todayIdx?'is-today':''}" aria-pressed="${i===dayIdx}" aria-label="${d}"><span>${d.slice(0,3)}</span><b class="num">${dayDate(i).getDate()}</b></button>`).join("");
+}
+function renderDay(){
+  const keys = [0,1,2,3].map(s => recipeFor(dayIdx,s));
+  const kcal = keys.reduce((a,k)=>a+R[k].kcal,0), p = keys.reduce((a,k)=>a+R[k].p,0);
+  const eaten = eatenList(dayIdx);
+  const ek = eaten.reduce((a,s)=>a+R[keys[s]].kcal,0), ep = eaten.reduce((a,s)=>a+R[keys[s]].p,0);
+  $("#summary").innerHTML = `
+    <div><div style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.85">${dayIdx===todayIdx?"Aujourd'hui":"Au programme"}</div>
+    <div class="dname">${WEEK[dayIdx][0]}</div></div>
+    <div class="stats">
+      <div class="stat"><b class="num">${fmt(kcal)}</b><small>kcal prévues · objectif ${fmt(TARGET_K)}</small></div>
+      <div class="stat"><b class="num">${p} g</b><small>protéines · objectif ${TARGET_P} g</small></div>
+    </div>
+    <div class="eatrow">
+      <div class="l num"><span>Déjà mangé : ${fmt(ek)} kcal</span><span>${ep} g prot.</span></div>
+      <div class="meter"><i style="width:${Math.min(100,ek/TARGET_K*100)}%"></i></div>
+      <div class="l num" style="font-weight:600;opacity:.85"><span>${eaten.length} / 4 repas</span><span>${ek>=TARGET_K?"Objectif atteint":"Reste " + fmt(Math.max(0,TARGET_K-ek)) + " kcal"}</span></div>
+    </div>`;
+  $("#timeline").innerHTML = keys.map((k,s) => {
+    const r = R[k], done = eaten.includes(s), sw = k !== baseFor(dayIdx,s);
+    return `<li class="tl k-${r.t}${done?' eaten':''}"><span class="dot">${SLOTS[s][0]}</span>
+      <div class="meal">
+        <button class="open" type="button" data-r="${k}">
+          <span class="when">${SLOTS[s][1]}${sw?' · <span class="swapped">changé</span>':''}</span>
+          <span class="name">${esc(r.name)}</span>
+          <span class="meta num"><span>${fmt(r.kcal)} kcal</span><span>${r.p} g prot.</span><span>${esc(r.time)}</span></span>
+        </button>
+        <div class="acts">
+          <button type="button" class="act${done?' done':''}" data-eat="${s}" aria-pressed="${done}"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>${done?"Mangé":"Marquer mangé"}</button>
+          <button type="button" class="act" data-swap="${s}"><svg viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Changer</button>
+        </div>
+      </div></li>`;
+  }).join("");
+  document.querySelectorAll("#days button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i===dayIdx)));
+}
+$("#days").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; dayIdx = +b.dataset.i; renderDay(); });
+$("#timeline").addEventListener("click", e => {
+  const eat = e.target.closest("[data-eat]"), sw = e.target.closest("[data-swap]");
+  if(eat){
+    const s = +eat.dataset.eat, key = iso(dayDate(dayIdx));
+    const days = Object.assign({}, S.repas.days || {});
+    const list = new Set(days[key] || []);
+    list.has(s) ? list.delete(s) : list.add(s);
+    days[key] = [...list].sort();
+    const cutoff = iso(new Date(now.getTime() - 60*864e5));
+    Object.keys(days).forEach(d => { if(d < cutoff || !days[d].length) delete days[d]; });
+    S.repas = {days}; save("repas"); renderDay();
+  }
+  if(sw) openSwap(+sw.dataset.swap);
+});
+
+/* ---------- Feuille (recette / changer) ---------- */
+let lastFocus = null;
+function openSheet(cls, html){
+  lastFocus = document.activeElement;
+  const sh = $("#sheet"); sh.className = "sheet " + cls; sh.innerHTML = html;
+  $("#sheetWrap").hidden = false; document.body.classList.add("lock"); sh.scrollTop = 0;
+  const c = sh.querySelector(".close"); if(c){ c.addEventListener("click", closeSheet); c.focus(); }
+}
+function closeSheet(){ $("#sheetWrap").hidden = true; document.body.classList.remove("lock"); if(lastFocus && document.contains(lastFocus)) lastFocus.focus(); }
+$("#scrim").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if(e.key==="Escape" && !$("#sheetWrap").hidden) closeSheet(); });
+
+function openRecipe(k){
+  const r = R[k];
+  openSheet("k-"+r.t, `
+    <div class="sheet-head">
+      <span class="grab" aria-hidden="true"></span>
+      <div class="row"><div style="display:grid;gap:4px"><span class="kind">${esc(r.kind)}</span><h2 id="sheetTitle">${esc(r.name)}</h2></div>
+      <button class="close" type="button" aria-label="Fermer">×</button></div>
+      <div class="pills num"><span class="pill dark">${fmt(r.kcal)} kcal</span><span class="pill dark">${r.p} g prot.</span><span class="pill">${esc(r.time)}</span><span class="pill">${esc(r.serv)}</span></div>
+    </div>
+    <div class="sheet-body">
+      <div class="tools">${r.tools.map(t=>`<span class="tool">${esc(t)}</span>`).join("")}</div>
+      <div><h4>Ingrédients</h4><ul class="ing">${r.ing.map(([a,b])=>`<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join("")}</ul></div>
+      <div><h4>Préparation</h4><ol class="rsteps">${r.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join("")}</ol></div>
+      ${r.note?`<p class="note">${esc(r.note)}</p>`:""}
+    </div>`);
+}
+function openSwap(s){
+  const t = SLOTS[s][2], base = baseFor(dayIdx,s), cur = recipeFor(dayIdx,s);
+  const opts = [base, ...ALTS[t].filter(k => k !== base)];
+  openSheet("k-"+t, `
+    <div class="sheet-head">
+      <span class="grab" aria-hidden="true"></span>
+      <div class="row"><div style="display:grid;gap:4px"><span class="kind">${WEEK[dayIdx][0]} · ${SLOTS[s][0]}</span><h2 id="sheetTitle">Changer ce repas</h2></div>
+      <button class="close" type="button" aria-label="Fermer">×</button></div>
+    </div>
+    <div class="sheet-body">
+      <p class="v-sub">Choisis un plat équivalent en calories. Les ingrédients en plus s'ajoutent à ta liste de courses.</p>
+      <div class="opts">${opts.map(k => `<button type="button" class="opt k-${R[k].t}" data-pick="${k}" aria-pressed="${k===cur}">
+        ${k===base?'<span class="tag">Plan de base</span>':''}
+        <span class="name">${esc(R[k].name)}</span>
+        <span class="meta num">${fmt(R[k].kcal)} kcal · ${R[k].p} g prot. · ${esc(R[k].time)}</span></button>`).join("")}</div>
+      <button type="button" class="linkbtn" data-see="${cur}">Voir la recette actuelle</button>
+    </div>`);
+  $("#sheet").querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => {
+    const swaps = Object.assign({}, S.choix.swaps || {});
+    if(b.dataset.pick === base) delete swaps[slotKey(dayIdx,s)]; else swaps[slotKey(dayIdx,s)] = b.dataset.pick;
+    S.choix = {swaps}; save("choix"); closeSheet(); renderDay(); renderShop();
+  }));
+  $("#sheet").querySelector("[data-see]").addEventListener("click", e => openRecipe(e.currentTarget.dataset.see));
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-r]"); if(b) openRecipe(b.dataset.r); });
+
+/* ---------- Recettes ---------- */
+$("#rgrid").innerHTML = Object.entries(R).map(([k,r]) => `
+  <button class="rtile k-${r.t}" type="button" data-r="${k}" data-t="${r.t}">
+    <span class="kind">${r.alt?"Rechange · ":""}${esc(r.kind.split(" · ")[0])}</span>
+    <span class="name">${esc(r.name)}</span>
+    <span class="meta num"><span>${fmt(r.kcal)} kcal</span><span>${r.p} g</span></span>
+  </button>`).join("");
+const fbtns = [...document.querySelectorAll("#filters button")];
+fbtns.forEach(b => b.addEventListener("click", () => {
+  fbtns.forEach(x => x.setAttribute("aria-pressed", String(x===b)));
+  document.querySelectorAll(".rtile").forEach(t => t.hidden = !(b.dataset.f==="all" || t.dataset.t===b.dataset.f));
+}));
+
+/* ---------- Courses & budget ---------- */
+let checked = lsGet("courses") || {};
+const planTotal = SHOP.reduce((a,[, ,items]) => a + items.reduce((b,it) => b + (it[3]||0), 0), 0);
+function renderBudget(){
+  const eur = Number(S.reglages.budgetEur) || 0, aud = eur * EUR_AUD, over = planTotal > aud;
+  $("#budget").innerHTML = `
+    <div class="big"><b class="num">${money(planTotal)}</b><span class="num">≈ ${fmt(Math.round(planTotal/EUR_AUD))} € · plan de la semaine</span></div>
+    <div class="bmeter${over?' over':''}"><i style="width:${aud?Math.min(100,planTotal/aud*100):100}%"></i></div>
+    <div class="bline num"><span>Budget : ${money(aud)} (${fmt(eur)} €)</span>${over?`<span class="warn">+${money(planTotal-aud)} au-dessus</span>`:`<span>Reste ${money(aud-planTotal)}</span>`}</div>
+    <div class="bset"><label for="beur">Mon budget par semaine</label><input id="beur" type="number" inputmode="numeric" min="0" step="5" value="${eur}"> €</div>
+    <p class="small">Le premier plein coûte plus cher : l'avoine, le riz, le beurre et le fromage durent plus d'une semaine. Taux utilisé : 1 € = ${String(EUR_AUD).replace(".",",")} $ (26 sept. 2026).</p>`;
+  $("#beur").addEventListener("change", e => { const v = Math.max(0, Number(e.target.value)||0); S.reglages = {budgetEur:v}; save("reglages"); renderBudget(); });
+}
+function renderShop(){
+  let idc = 0;
+  const swapKeys = [...new Set(Object.values(S.choix.swaps || {}))];
+  const extraItems = [];
+  swapKeys.forEach(k => R[k] && R[k].ing.forEach(([n,q]) => extraItems.push([n, R[k].name, q, null, 0])));
+  const sections = SHOP.slice();
+  if(extraItems.length) sections.unshift(["Pour tes repas changés (vérifie ce que tu as déjà)","shake",extraItems]);
+  $("#shop").innerHTML = sections.map(([aisle,t,items]) => `
+    <div class="aisle k-${t}"><h3><i></i>${esc(aisle)}</h3><ul>${items.map(([fr,en,q,pr,est]) => { const id = "c"+(idc++), key = aisle+"|"+fr+"|"+en;
+      return `<li><label for="${id}"><input type="checkbox" id="${id}" data-k="${esc(key)}"${checked[key]?" checked":""}><span class="it">${esc(fr)}<span class="en">${esc(en)}</span></span>
+        <span class="qty num"><span>${esc(q)}</span>${pr!=null?`<span class="price${est?' est':''}">${est?"~ ":""}${money(pr)}</span>`:""}</span></label></li>`; }).join("")}</ul></div>`).join("");
+  const boxes = [...document.querySelectorAll("#shop input")];
+  const upd = () => { const n = boxes.filter(b=>b.checked).length; $("#progress").textContent = `${n} / ${boxes.length} dans le caddie`; $("#barfill").style.width = (boxes.length?100*n/boxes.length:0)+"%"; };
+  boxes.forEach(b => b.addEventListener("change", () => { checked[b.dataset.k] = b.checked; lsSet("courses", checked); upd(); }));
+  $("#reset").onclick = () => { boxes.forEach(b=>b.checked=false); checked = {}; lsSet("courses", checked); upd(); };
+  upd();
+}
+
+/* ---------- Poids ---------- */
+$("#wdate").value = iso(now);
+function renderWeight(){
+  const E = (S.poids.entries || []).slice().sort((a,b) => a.d < b.d ? -1 : 1);
+  const body = $("#wbody");
+  if(!E.length){ body.innerHTML = `<p class="empty">Note ton premier poids pour démarrer ta courbe.</p>`; return; }
+  const first = E[0], last = E[E.length-1];
+  const days = (parseIso(last.d) - parseIso(first.d)) / 864e5, weeks = days/7, diff = last.kg - first.kg;
+  const rate = weeks >= 1 ? diff/weeks : null;
+  let v;
+  if(rate === null) v = ["k-shake", `Continue à te peser chaque semaine. Il faut au moins 7 jours d'écart pour voir ton rythme.`];
+  else if(rate < 0.2) v = ["k-matin", `Tu prends ${fmt(Math.round(rate*100)/100)} kg par semaine : un peu lent. Ajoute 200 à 300 kcal par jour (plus de beurre de cacahuète dans le shake).`];
+  else if(rate <= 0.55) v = ["k-soir", `Tu prends ${fmt(Math.round(rate*100)/100)} kg par semaine : c'est pile dans l'objectif. Continue comme ça.`];
+  else v = ["k-midi", `Tu prends ${fmt(Math.round(rate*100)/100)} kg par semaine : un peu rapide. Retire environ 200 kcal par jour (moins de miel et de beurre de cacahuète).`];
+  const sign = n => (n>0?"+":"") + fmt(Math.round(n*10)/10);
+  // Graphique
+  const W = 400, H = 230, L = 40, Rt = 10, T = 12, B = 30;
+  const x0 = parseIso(first.d).getTime(), xEndT = Math.max(parseIso(last.d).getTime(), x0 + 28*864e5);
+  const wEnd = (xEndT - x0)/(7*864e5);
+  const bandLo = first.kg + 0.25*wEnd, bandHi = first.kg + 0.5*wEnd;
+  let yMin = Math.min(...E.map(e=>e.kg), first.kg) - 0.5, yMax = Math.max(...E.map(e=>e.kg), bandHi) + 0.5;
+  yMin = Math.floor(yMin*2)/2; yMax = Math.ceil(yMax*2)/2;
+  const X = t => L + (t - x0)/(xEndT - x0) * (W - L - Rt);
+  const Y = kg => T + (yMax - kg)/(yMax - yMin) * (H - T - B);
+  const step = (yMax - yMin) > 4 ? 1 : 0.5;
+  let grid = "";
+  for(let g = yMin; g <= yMax + 1e-9; g += step){ grid += `<line class="grid" x1="${L}" x2="${W-Rt}" y1="${Y(g)}" y2="${Y(g)}"/><text class="axis" x="${L-8}" y="${Y(g)+4}" text-anchor="end">${fmt(g)}</text>`; }
+  const band = `<polygon class="band" points="${X(x0)},${Y(first.kg)} ${X(xEndT)},${Y(bandHi)} ${X(xEndT)},${Y(bandLo)}"/>`;
+  const pts = E.map(e => [X(parseIso(e.d).getTime()), Y(e.kg)]);
+  const line = pts.length > 1 ? `<polyline class="line" points="${pts.map(p=>p.join(",")).join(" ")}"/>` : "";
+  const dots = pts.map((p,i) => `<circle class="pt" cx="${p[0]}" cy="${p[1]}" r="${i===pts.length-1?6:4.5}"/>`).join("");
+  const xl = `<text class="axis" x="${L}" y="${H-8}">${shortDate(first.d)}</text><text class="axis" x="${W-Rt}" y="${H-8}" text-anchor="end">${shortDate(iso(new Date(xEndT)))}</text>`;
+  body.innerHTML = `
+    <div class="wstats num">
+      <div class="wstat"><b>${fmt(first.kg)} kg</b><span>Départ · ${shortDate(first.d)}</span></div>
+      <div class="wstat"><b>${fmt(last.kg)} kg</b><span>Actuel · ${shortDate(last.d)}</span></div>
+      <div class="wstat"><b>${sign(diff)} kg</b><span>${weeks>=1?`en ${fmt(Math.round(weeks*10)/10)} sem.`:"depuis le départ"}</span></div>
+    </div>
+    <p class="verdict ${v[0]}">${v[1]}</p>
+    <div class="chart">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe de poids">${grid}${band}${line}${dots}${xl}</svg>
+      <div class="legend"><span><i style="background:var(--brand)"></i>Ton poids</span><span><i style="background:var(--sage);opacity:.6"></i>Zone visée (+0,25 à +0,5 kg/sem.)</span></div>
+    </div>
+    <h2 style="font-size:1.2rem;font-weight:800">Historique</h2>
+    <ul class="wlist num">${E.slice().reverse().map(e => `<li><span class="d">${parseIso(e.d).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"long"})}</span><span class="k">${fmt(e.kg)} kg</span><button type="button" data-del="${e.d}" aria-label="Supprimer la pesée du ${shortDate(e.d)}">×</button></li>`).join("")}</ul>`;
+  body.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
+    S.poids = {entries:(S.poids.entries||[]).filter(e => e.d !== b.dataset.del)}; save("poids"); renderWeight();
+    $("#wstatus").textContent = "Pesée supprimée.";
+  }));
+}
+$("#wform").addEventListener("submit", e => {
+  e.preventDefault();
+  const kg = Math.round(parseFloat(String($("#wkg").value).replace(",", "."))*10)/10, d = $("#wdate").value;
+  if(!(kg >= 30 && kg <= 200) || !d){ $("#wstatus").textContent = "Entre un poids entre 30 et 200 kg et une date."; return; }
+  const entries = (S.poids.entries||[]).filter(x => x.d !== d); entries.push({d, kg});
+  S.poids = {entries}; save("poids"); renderWeight();
+  $("#wstatus").textContent = `${fmt(kg)} kg notés pour le ${shortDate(d)}`; $("#wkg").value = "";
+});
+
+/* ---------- Prep ---------- */
+$("#sessions").innerHTML = SESSIONS.map(([when,t,what,steps],i) => `
+  <li class="sess k-${t}"><span class="n">${i+1}</span><span class="when">${esc(when)}</span><h3>${esc(what)}</h3><ul>${steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></li>`).join("");
+
+/* ---------- Onglets ---------- */
+const tabs = [...document.querySelectorAll(".tabbar button")];
+function show(v){
+  document.querySelectorAll(".view").forEach(s => s.hidden = s.id !== "v-"+v);
+  tabs.forEach(t => { if(t.dataset.v===v) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
+  window.scrollTo(0,0);
+}
+tabs.forEach(t => t.addEventListener("click", () => show(t.dataset.v)));
+const h = location.hash.replace("#","");
+if(["jour","recettes","courses","poids","prep"].includes(h)) show(h);
+
+function renderAll(){ renderDays(); renderDay(); renderBudget(); renderShop(); renderWeight(); }
+load();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body>
+</html>
