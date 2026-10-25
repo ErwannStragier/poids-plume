@@ -24,7 +24,8 @@
   --brand:#7A1F2B; --on-brand:#FFFFFF;
   --yolk:#EBA844; --coral:#E0724F; --rose:#F0B9B2; --sage:#A9BF93;
   --chip-ink:#241817; --scrim:rgba(36,24,23,.45);
-  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --display:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --brandfont:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --serif:"Fraunces", Georgia, "Times New Roman", serif;
   --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -506,6 +507,18 @@ select.set-in{text-align:left;appearance:auto;width:140px}
 @keyframes spWord{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes spWordOut{to{opacity:0;transform:translateY(-6px)}}
 @keyframes spFail{to{opacity:0;visibility:hidden;pointer-events:none}}
+
+/* ---------- Version allégée (oct. 2026) ---------- */
+.add-line{width:100%;border:1.5px dashed var(--line);background:transparent;color:var(--muted);border-radius:14px;padding:11px 14px;font-weight:700;font-size:.88rem;cursor:pointer;text-align:center}
+.add-line:hover{color:var(--brand);border-color:var(--brand)}
+.journal.empty-j{background:transparent;border:0;padding:0}
+.sum2 .l > span:last-child{opacity:1;font-weight:800}
+.more-btn{justify-self:center;margin-top:4px}
+#v-recettes .search{margin-bottom:-2px}
+.tips-d summary{font-family:var(--display);font-weight:800;font-size:1.05rem;color:var(--ink);padding:4px 0}
+.tips-d .tips{margin-top:8px}
+.budget .more summary{padding-top:2px}
+.budget .more .eco-box{margin-top:8px}
 /* ---------- Animations ---------- */
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -537,6 +550,153 @@ button:active:not(:disabled){transform:scale(.96)}
 .tl.eaten .meal{box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 45%,transparent)}
 .days button{transition:background .2s,border-color .2s,color .2s,transform .12s}
 .rtile,.opt,.flist button{transition:transform .15s, box-shadow .15s}
+
+/* ================= Style pro (oct. 2026) ================= */
+.wordmark{font-family:var(--brandfont)!important}
+h1,h2,h3,.v-title{font-family:var(--display);font-weight:800;letter-spacing:-.02em}
+.v-title{font-size:1.6rem}
+.daybar,.weeknav,.budget,.aisle,.day,.recipe,.session,.sess,.tip,.wstat,.chart,.wlist,.journal:not(.empty-j),.set-card,.set-cat,.opt,.toggle,.shopbar{border:0!important;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)}
+.shopbar{background:var(--surface)!important;color:var(--ink)!important}
+.shopbar .ghost{border-color:var(--line);color:var(--ink)}
+.shopbar .meter{background:var(--line)}
+.dstep,.weeknav button{background:var(--paper)}
+/* Résumé du jour : anneau + macros */
+.sum2{background:var(--surface)!important;color:var(--ink)!important;border-radius:22px;padding:18px 16px 16px;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);gap:16px}
+.ringrow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}
+.ringrow .side{display:grid;justify-items:center;gap:2px}
+.ringrow .side b{font-size:1.15rem;font-weight:800}
+.ringrow .side span{font-size:.75rem;color:var(--muted);font-weight:600}
+.ring{position:relative;width:min(44vw,172px);aspect-ratio:1;max-width:100%}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:12}
+.ring .trk{stroke:var(--line)}
+.ring .prg{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)}
+.ring .rc{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center}
+.ring .rc b{font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ring .rc span{font-size:.75rem;color:var(--muted);font-weight:600;margin-top:4px}
+.macros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mac{display:grid;gap:5px;justify-items:center;text-align:center}
+.mac .mlbl{font-size:.8rem;font-weight:700}
+.mac .meter{width:100%;height:5px;background:var(--line)}
+.mac .mval{font-size:.75rem;color:var(--muted);font-weight:600}
+.sum2 .her{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;font-size:.8rem;padding-top:12px;border-top:1px solid var(--line)}
+.sum2 .her .meter{height:5px;background:var(--line)}
+.sum2 .her span:last-child{color:var(--muted);font-weight:600}
+/* Cartes repas */
+.timeline{gap:10px}
+.mcard{display:grid;grid-template-columns:44px minmax(0,1fr) 36px 40px;align-items:center;gap:10px;background:var(--surface);border-radius:18px;padding:12px 10px 12px 12px;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)}
+.mcard .mic{width:44px;height:44px;border-radius:14px;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:color-mix(in srgb,var(--c) 70%,var(--ink));display:grid;place-items:center}
+.mcard .mic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mcard .info .sl{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;font-weight:800;color:var(--ink);letter-spacing:0;text-transform:none}
+.mcard .info .sk{color:var(--muted);font-weight:700}
+.mcard .info .nm{font-size:.9rem;font-weight:500;color:var(--muted);line-height:1.3}
+.mcard .info .mt{font-size:.72rem;color:var(--muted);font-weight:600;opacity:.8}
+.mcard .swp{width:36px;height:36px;border-radius:12px;background:transparent}
+.mcard .chk{width:40px;height:40px;border:0;background:var(--paper);color:var(--muted)}
+.mcard .chk svg{stroke-width:2.6}
+.mcard.eaten .chk{background:var(--brand);color:#fff}
+.mcard.eaten .nm{text-decoration:none;color:var(--muted)}
+.mcard.eaten .sl{color:var(--brand)}
+.mcard.pop .chk{animation:pop .35s ease-out}
+.tabbar{background:color-mix(in srgb,var(--surface) 92%,transparent)!important;border-top:1px solid var(--line)}
+.tabbar button[aria-current="page"]{background:transparent!important;color:var(--brand)}
+.tabbar button[aria-current="page"] svg{stroke-width:2.2}
+.add-line{border-style:solid;background:var(--surface);border-color:transparent;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);color:var(--brand)}
+.rtile{box-shadow:0 1px 2px rgba(20,20,30,.05)}
+.weigh{background:var(--surface)!important;border:0!important;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);padding:10px 12px 10px 16px;border-left:4px solid var(--yolk)!important}
+.weigh .wtxt{display:grid;gap:0}
+.weigh .wtxt small{font-weight:600;color:var(--muted);font-size:.78rem}
+.weigh .addbtn{white-space:nowrap}
+/* Pro : autres onglets */
+.rtile{background:var(--surface)!important;color:var(--ink)!important;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)!important;min-height:120px}
+.rtile .kind{color:color-mix(in srgb,var(--c) 70%,var(--ink));display:flex;align-items:center;gap:6px}
+.rtile .kind::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.rtile .name{font-weight:700}
+.rtile .meta span{background:var(--paper)!important;color:var(--muted)}
+.wform{background:var(--surface)!important;color:var(--ink)!important;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)}
+.wform label{color:var(--muted);opacity:1}
+.wform input{background:var(--paper)!important;color:var(--ink)!important}
+.wform .save{background:var(--brand)!important;color:#fff!important}
+.verdict{background:var(--surface)!important;border-left:4px solid var(--c);box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)}
+.sess h3{font-size:1rem;line-height:1.25}
+.sess ul{color:var(--muted)}
+.aisle h3{font-weight:800}
+
+/* ================= Identité Poids plume (oct. 2026, v2) ================= */
+/* Bandeau du jour */
+.hero{background:var(--brand);color:#fff;border-radius:24px;padding:18px 18px 16px;display:grid;gap:14px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.07)}
+.hero > *{position:relative}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.hero-main{display:grid;gap:2px}
+.hero .big{font-family:var(--brandfont);font-size:3.2rem;font-weight:800;letter-spacing:-.04em;line-height:.95;font-variation-settings:"opsz" 96}
+.hero .sub{font-size:.85rem;font-weight:600;opacity:.82}
+.hero-side{display:grid;justify-items:end;text-align:right}
+.hero-side b{font-size:1.15rem;font-weight:800}
+.hero-side span{font-size:.75rem;opacity:.75;font-weight:600}
+.daystrip{display:flex;gap:4px;height:12px}
+.daystrip .seg{position:relative;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden;min-width:10px}
+.daystrip .seg i{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.daystrip .seg.on i{transform:none}
+.daystrip .seg.extra i{background:var(--yolk)}
+.mline{display:flex;gap:6px}
+.mp{flex:1;position:relative;overflow:hidden;background:rgba(255,255,255,.12);border-radius:10px;padding:7px 9px 9px;font-size:.82rem;font-weight:700;white-space:nowrap}
+.mp b{opacity:.7;font-weight:800}
+.mp small{opacity:.7;font-weight:600;font-size:.72rem}
+.mp i{position:absolute;left:0;bottom:0;height:3px;background:#fff;opacity:.85}
+.hher{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:.78rem;font-weight:700;opacity:.92}
+.hher .hbar{height:4px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+.hher .hbar i{display:block;height:100%;background:var(--rose)}
+/* Carte de menu (repas) */
+.mlist{list-style:none;margin:0;padding:2px 16px;background:var(--surface);border-radius:22px;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);display:grid}
+.mrow{display:grid;grid-template-columns:54px minmax(0,1fr) 30px 36px;gap:8px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0}
+.mtime{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px;justify-items:start}
+.mtime::before{content:"";width:18px;height:3px;border-radius:2px;background:var(--c)}
+.mrow .info{display:grid;gap:2px}
+.mrow .nm{font-weight:700;font-size:.95rem;line-height:1.25;color:var(--ink)}
+.mrow .mt{font-size:.76rem;color:var(--muted);font-weight:600}
+.mrow .swp{width:30px;height:30px;border-radius:10px;background:transparent;color:var(--muted);border:0}
+.mrow .chk{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:transparent;color:transparent;display:grid;place-items:center;padding:0;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.mrow .chk svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.mrow.eaten .chk{background:var(--brand);border-color:var(--brand);color:#fff}
+.mrow.eaten .nm{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--muted)}
+.mrow.pop .chk{animation:pop .35s ease-out}
+/* Recettes rangées */
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border-radius:14px;padding:4px;gap:4px;box-shadow:0 1px 2px rgba(20,20,30,.04)}
+.seg3 button{border:0;background:transparent;border-radius:10px;padding:9px 0;font-weight:700;font-size:.88rem;color:var(--muted);cursor:pointer}
+.seg3 button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.rhome{display:grid;gap:22px}
+.rblock{display:grid;gap:10px}
+.rblock[hidden]{display:none}
+.rbh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.rbh h2{font-size:1.05rem;font-weight:800}
+.rbh span{font-size:.8rem;color:var(--muted);font-weight:700}
+.hscroll{display:flex;gap:10px;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scroll-snap-type:x mandatory}
+.wcard{flex:none;width:150px;scroll-snap-align:start;text-align:left;border:0;background:var(--surface);border-radius:18px;padding:12px;display:grid;gap:6px;align-content:space-between;min-height:132px;cursor:pointer;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);border-top:4px solid var(--c)}
+.wcard .wt{font-size:.68rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.wcard .wn{font-weight:700;font-size:.9rem;line-height:1.25;color:var(--ink)}
+.wcard .wk{font-size:.78rem;color:var(--muted);font-weight:700}
+.cats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.cat{border:0;background:var(--surface);border-radius:16px;padding:14px;display:grid;gap:2px;text-align:left;cursor:pointer;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05);border-left:4px solid var(--c);color:var(--ink)}
+.cat b{font-size:.98rem}
+.cat span{font-size:.78rem;color:var(--muted);font-weight:600}
+.cat:last-child:nth-child(odd){grid-column:1/-1}
+.rlist{list-style:none;margin:0;padding:2px 14px;background:var(--surface);border-radius:20px;box-shadow:0 1px 2px rgba(20,20,30,.04),0 6px 20px rgba(20,20,30,.05)}
+.rlist li + li{border-top:1px solid var(--line)}
+.rrow{width:100%;border:0;background:transparent;display:grid;grid-template-columns:10px 1fr auto;gap:12px;align-items:center;padding:12px 0;text-align:left;cursor:pointer;color:var(--ink)}
+.rrow .rdot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.rrow .rn{font-weight:700;font-size:.93rem;line-height:1.3;display:grid;gap:2px}
+.rrow .rn small{font-weight:600;font-size:.76rem;color:var(--muted)}
+.rrow .rch{color:var(--muted);font-size:1.3rem;font-weight:700}
+.rresults{display:grid;gap:10px}
+.back2{border:0;background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;font-size:.85rem;cursor:pointer;color:var(--ink);box-shadow:0 1px 2px rgba(20,20,30,.05)}
+
+.aisle .price{border:0;background:transparent;font:inherit;font-weight:800;color:var(--ink);padding:2px 0;cursor:pointer;text-decoration:underline dotted var(--line);text-underline-offset:3px}
+.aisle .price.p-est{color:var(--muted)}
+.aisle .price.p-fallback{color:var(--muted);font-weight:600;font-style:italic}
+.aisle .price.p-user{color:var(--brand)}
+#storeNote{margin-top:-4px}
 </style>
 </head>
 <body>
@@ -592,30 +752,38 @@ button:active:not(:disabled){transform:scale(.96)}
   <!-- RECETTES -->
   <section class="view" id="v-recettes" aria-label="Recettes" hidden>
     <h1 class="v-title">Recettes</h1>
-    <div class="filters" id="filters" role="group" aria-label="Filtrer">
-      <button type="button" data-f="all" aria-pressed="true">Toutes</button>
-      <button type="button" data-f="matin" class="k-matin" aria-pressed="false"><i></i>Petit-déj</button>
-      <button type="button" data-f="repas" class="k-midi" aria-pressed="false"><i></i>Repas</button>
-      <button type="button" data-f="shake" class="k-shake" aria-pressed="false"><i></i>Shake</button>
+    <input class="search" id="rsearch" type="search" placeholder="Chercher une recette ou un ingrédient" autocomplete="off" aria-label="Chercher une recette">
+    <div class="seg3" id="rtype" role="tablist" aria-label="Type de repas">
+      <button type="button" role="tab" data-f="repas" aria-pressed="true">Repas</button>
+      <button type="button" role="tab" data-f="matin" aria-pressed="false">Petit-déj</button>
+      <button type="button" role="tab" data-f="shake" aria-pressed="false">Collations</button>
     </div>
-    <h2 class="rsec" id="rweekTitle">Au menu cette semaine</h2>
-    <div class="rgrid" id="rweek"></div>
-    <h2 class="rsec" id="rothersTitle">Autres recettes</h2>
-    <div class="rgrid" id="rgrid"></div>
+    <div id="rhome" class="rhome">
+      <section class="rblock" id="rbWeek"><div class="rbh"><h2>Cette semaine</h2><span id="rweekCount"></span></div><div class="hscroll" id="rweek"></div></section>
+      <section class="rblock" id="rbCats"><div class="rbh"><h2>Par protéine</h2></div><div class="cats" id="rcats"></div></section>
+      <section class="rblock"><div class="rbh"><h2 id="rclassicTitle">Les classiques</h2><span id="rclassicCount"></span></div><ul class="rlist" id="rclassic"></ul></section>
+    </div>
+    <div id="rresults" class="rresults" hidden>
+      <div class="rbh"><button type="button" class="back2" id="rback">‹ Retour</button><span id="rcount"></span></div>
+      <ul class="rlist" id="rgrid"></ul>
+    <button type="button" class="ghost2 more-btn" id="rmore" hidden>Voir plus</button>
+    </div>
   </section>
 
   <!-- COURSES -->
   <section class="view" id="v-courses" aria-label="Courses" hidden>
     <h1 class="v-title">Courses</h1>
     <div class="weeknav" data-nav></div>
-    <label class="toggle" for="pour2"><span><b>Courses pour 2</b><small>Ajoute ses portions (sans le shake)</small></span><input type="checkbox" id="pour2" role="switch"><i aria-hidden="true"></i></label>
+    <input type="checkbox" id="pour2" hidden>
+    <div class="seg3" id="storeSeg" role="group" aria-label="Magasin"><button type="button" data-store="aldi" aria-pressed="true">Aldi</button><button type="button" data-store="coles" aria-pressed="false">Coles</button><button type="button" data-store="woolworths" aria-pressed="false">Woolworths</button></div>
+    <p class="small" id="storeNote"></p>
     <div class="budget" id="budget"></div>
     <div class="shopbar">
       <div class="shoprow"><b class="num" id="progress">0 / 0</b><button class="ghost" id="reset" type="button">Tout décocher</button></div>
       <div class="meter"><i id="barfill" style="width:0"></i></div>
     </div>
     <div id="shop" style="display:grid;gap:16px"></div>
-    <p class="small">« Stock » : un paquet dure plusieurs semaines, vérifie ton placard avant d'acheter.</p>
+
   </section>
 
   <!-- POIDS -->
@@ -637,7 +805,7 @@ button:active:not(:disabled){transform:scale(.96)}
     <div><h1 class="v-title">Meal prep</h1><p class="v-sub">3 sessions par semaine. Prévois une douzaine de boîtes micro-ondables.</p></div>
     <div class="weeknav" data-nav></div>
     <ol class="steps-list" id="sessions"></ol>
-    <h2 style="font-size:1.4rem;font-weight:800">Conseils</h2>
+    <details class="more tips-d"><summary>Conseils</summary>
     <div class="tips">
       <div class="tip"><b>Tu stagnes ?</b><span>Rien après 2 semaines : +200 à 300 kcal (30 g de beurre de cacahuète en plus dans le shake).</span></div>
       <div class="tip"><b>Trop vite ?</b><span>Plus de 0,5 kg par semaine sur la durée : retire environ 200 kcal (moins de miel et de beurre de cacahuète).</span></div>
@@ -645,7 +813,7 @@ button:active:not(:disabled){transform:scale(.96)}
       <div class="tip"><b>Eau</b><span>2,5 à 3 L par jour, plus quand tu bosses au soleil.</span></div>
       <div class="tip"><b>Sécurité</b><span>Repas cuisinés : 3 jours max au frigo. Le reste au congélateur, décongelé au frigo la veille.</span></div>
     </div>
-    <p class="v-sub" style="font-size:.82rem">Calories calculées avec des valeurs nutritionnelles moyennes. C'est la balance qui dit s'il faut ajuster.</p>
+    </details>
   </section>
 </div>
 
@@ -685,7 +853,8 @@ const I = {
  sausage:["Saucisses de bœuf","g",260,13,"prot"], thigh:["Hauts de cuisse de poulet","g",120,20,"prot"],
  yogurt:["Yaourt à la grecque","g",120,7,"lait"], sweet:["Patate douce","g",86,1.6,"fec"], coco:["Lait de coco (boîte)","pc",700,7,"gras",{one:"boîte",many:"boîtes"}],
  avocado:["Avocat","pc",240,3,"gras",{one:"avocat",many:"avocats"}], feta:["Feta","g",265,14,"gras"], bacon:["Lardons (bacon)","g",180,18,"prot"],
- bun:["Pains burger","pc",150,5,"fec",{one:"pain",many:"pains"}], tomato:["Tomate","pc",22,1,"leg",{one:"tomate",many:"tomates"}]
+ bun:["Pains burger","pc",150,5,"fec",{one:"pain",many:"pains"}], tomato:["Tomate","pc",22,1,"leg",{one:"tomate",many:"tomates"}],
+ garlic:["Ail","g",0,0,"cond",{tsp:3}], bbq:["Sauce barbecue","g",150,1,"cond",{tbsp:20}]
 };
 /* produit : [nom anglais, taille du paquet (même unité), prix $, estimé?, dure plusieurs semaines?, rayon] */
 const P = {
@@ -706,7 +875,8 @@ const P = {
  sausage:["beef sausages 1 kg",1000,7.99,1,0,"viande"], thigh:["chicken thigh fillets bulk (~13,29 $/kg)",1000,13.29,0,0,"viande"],
  yogurt:["greek style yoghurt 1 kg",1000,4.49,1,0,"frais"], sweet:["sweet potatoes 1 kg",1000,3.99,1,0,"fl"], coco:["coconut milk 400 ml",1,1.29,1,0,"epi"],
  avocado:["hass avocado",1,2.29,0,0,"fl"], feta:["persian fetta 180 g",180,4.29,0,0,"frais"], bacon:["short cut bacon 250 g",250,4.99,1,0,"frais"],
- bun:["burger buns (6)",6,2.49,1,0,"epi"], tomato:["gourmet tomatoes 500 g (~4)",4,2.99,0,0,"fl"]
+ bun:["burger buns (6)",6,2.49,1,0,"epi"], tomato:["gourmet tomatoes 500 g (~4)",4,2.99,0,0,"fl"],
+ garlic:["garlic",null,null,0,1,"placard"], bbq:["bbq sauce 500 ml",540,2.29,1,1,"epi"]
 };
 const HER = {prot:0.75, fec:0.45, gras:0.35, lait:0.5, leg:1.1, fruit:1, cond:0.6};
 const RI = {
@@ -841,6 +1011,13 @@ const tK = () => Number(S.reglages.targetK) || 3300, tP = () => Number(S.reglage
 const ANCHOR = new Date(2026, 8, 28); /* lundi 28 sept 2026 = semaine 1 */
 const TYPE_LABEL = {matin:"Petit-déjeuner", shake:"Collation", repas:"Déjeuner ou dîner"};
 const TYPE_CLS = {matin:"k-matin", shake:"k-shake", repas:"k-midi"};
+const MEAL_NAME = ["Petit-déjeuner","Déjeuner","Collation","Dîner"];
+const MEAL_ICO = [
+  '<circle cx="12" cy="13" r="4"/><path d="M12 4v2M5.6 7.6l1.4 1.4M18.4 7.6 17 9M3 17h18M7 20h10"/>',
+  '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 8c0-1.5 1-2 1-3.5M12 8c0-1.5 1-2 1-3.5M16 8c0-1.5 1-2 1-3.5"/>',
+  '<path d="M7 7h10l-1.5 13h-7z"/><path d="M6.5 7h11M12 3v4"/>',
+  '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'
+];
 const SLOTS = [["Matin","Avant le boulot","matin","k-matin"],["Midi","Sur le chantier","repas","k-midi"],["Shake","15–16 h","shake","k-shake"],["Soir","Le soir","repas","k-soir"]];
 const AISLES = [["viande","Viandes, poisson, œufs","k-midi"],["frais","Frais","k-shake"],["epi","Épicerie","k-matin"],["fl","Fruits, légumes & surgelés","k-soir"],["placard","Placard (une fois, puis ça dure)","k-matin"]];
 
@@ -875,6 +1052,11 @@ function fx(){
     el.style.width = (prevW[k] ?? 0) + "%"; void el.offsetWidth;
     requestAnimationFrame(() => { el.style.width = w + "%"; }); prevW[k] = w;
   });
+  document.querySelectorAll("[data-ring]").forEach(el => {
+    const to = Number(el.dataset.ring), C = Number(el.getAttribute("stroke-dasharray")), from = prevW.__ring ?? C;
+    if(reduced()){ el.style.strokeDashoffset = to; prevW.__ring = to; return; }
+    el.style.strokeDashoffset = from; void el.getBoundingClientRect(); requestAnimationFrame(() => { el.style.strokeDashoffset = to; }); prevW.__ring = to;
+  });
   document.querySelectorAll("[data-count]").forEach(el => {
     const to = Number(el.dataset.count) || 0, k = el.dataset.ck, from = prevN[k] ?? to, money_ = !!el.dataset.money; prevN[k] = to;
     const show = v => el.textContent = money_ ? money(v) : fmt(Math.round(v));
@@ -885,11 +1067,90 @@ function fx(){
   });
 }
 
+/* ---------- Générateur de recettes (combinaisons) ---------- */
+const CURK = Object.keys(RI);          /* recettes écrites à la main : utilisées pour les menus et le budget */
+(function(){
+  const kc = ing => ing.reduce((a,[id,q]) => { const x = I[id]; return a + x[2]*(x[1]==="pc" ? q : q/100); }, 0);
+  const add = (key, t, ing, meta) => { RI[key] = [t, ing]; META[key] = meta; };
+  const GP = [
+    ["poulet","Poulet",[["thigh",180]],"Poêle : poulet en morceaux dans un filet d'huile, 6–8 min, jusqu'à ce qu'il soit bien cuit à cœur.",15,["Poêle"]],
+    ["blanc","Blanc de poulet",[["breast",170]],"Poêle : blanc de poulet en lanières, 6–8 min, jusqu'à ce qu'il ne soit plus rose au centre.",15,["Poêle"]],
+    ["effiloche","Poulet effiloché",[["drum",300]],"Four à 200 °C : pilons 40–45 min. Laisse tiédir, retire la peau et les os, effiloche la viande.",45,["Four"]],
+    ["boeuf","Bœuf haché",[["mince",130],["lentils",20]],"Poêle : bœuf haché 6–8 min en l'émiettant, ajoute les lentilles rincées et un fond d'eau, 10 min.",20,["Poêle"]],
+    ["steak","Steak",[["steak",180]],"Poêle très chaude : steak 2–3 min de chaque côté, laisse reposer 3 min puis tranche.",10,["Poêle"]],
+    ["porc","Porc haché",[["pork",150]],"Poêle : porc haché 6–8 min en l'émiettant, jusqu'à ce qu'il soit bien doré.",15,["Poêle"]],
+    ["saucisses","Saucisses",[["sausage",170]],"Poêle : saucisses 12–15 min à feu moyen en les tournant, puis coupe-les en rondelles.",20,["Poêle"]],
+    ["thon","Thon",[["tuna",1],["egg",1]],"Égoutte le thon. Fais cuire l'œuf 9 min dans l'eau bouillante, puis coupe-le.",10,["Casserole"]],
+    ["saumon","Saumon",[["salmon",150]],"Poêle : saumon côté peau 4 min, retourne-le 2–3 min.",10,["Poêle"]],
+    ["oeufs","Œufs",[["egg",4],["cheese",15]],"Bats les œufs avec le fromage et brouille-les 2–3 min à feu doux (ou fais une omelette).",10,["Poêle"]],
+    ["lentilles","Lentilles corail",[["lentils",90],["egg",1]],"Casserole : lentilles rincées dans 3 fois leur volume d'eau, 12–15 min. Œuf dur 9 min à côté.",20,["Casserole"]],
+    ["haricots","Haricots rouges",[["beans",1],["egg",2]],"Rince les haricots et réchauffe-les 3 min à la poêle. Œufs durs 9 min à côté.",15,["Poêle","Casserole"]],
+    ["poischiches","Pois chiches",[["chick",1],["egg",2]],"Rince les pois chiches et fais-les dorer 5 min à la poêle. Œufs durs 9 min à côté.",15,["Poêle","Casserole"]]
+  ];
+  const GS = [
+    ["riz","riz","rice",3.6,70,180,"Casserole : riz dans 2 fois son volume d'eau salée, couvercle, 12–15 min à feu doux.",15,["Casserole"]],
+    ["pates","pâtes","pasta",3.55,80,180,"Casserole : cuis les pâtes selon le paquet, garde un fond d'eau de cuisson.",12,["Casserole"]],
+    ["nouilles","nouilles","noodles",1.5,150,450,"Détache les nouilles sous l'eau chaude, elles finissent de cuire dans la poêle.",3,[]],
+    ["pdt","pommes de terre","potato",0.77,200,650,"Pommes de terre en cubes : 15 min dans l'eau salée, ou 35 min au four à 200 °C avec un filet d'huile.",30,["Casserole"]],
+    ["patate","patate douce","sweet",0.86,200,600,"Four à 200 °C : patate douce en cubes avec un filet d'huile, 30 min.",30,["Four"]],
+    ["wrap","wraps","tortilla",190,2,4,"Chauffe les tortillas 20 secondes dans la poêle sèche.",2,["Poêle"]]
+  ];
+  const GT = [
+    ["teriyaki","teriyaki",[["soy",30],["honey",21],["oil",7]],"Ajoute la sauce soja et le miel, laisse réduire 1–2 min pour bien napper."],
+    ["curry","au curry",[["curry",3],["tomcan",0.5],["onion",0.25],["oil",7]],"Oignon émincé 3 min, curry 1 min, puis les tomates concassées, 8 min à feu doux."],
+    ["tomate","à la tomate",[["passata",150],["herbs",1],["oil",7]],"Ajoute la passata et les herbes, 8 min à feu doux."],
+    ["mexicain","façon mexicaine",[["taco",0.25],["tomcan",0.5],["cheese",20]],"Épices taco 1 min, puis les tomates 5 min. Fromage râpé au moment de servir."],
+    ["paprika","au paprika fumé",[["paprika",3],["oil",10]],"Enrobe d'huile et de paprika avant de cuire, pour une croûte bien dorée."],
+    ["chilli","sweet chilli",[["chilli",30],["oil",7]],"Ajoute la sauce sweet chilli à la fin et mélange 1 min."],
+    ["creme","crème & fromage",[["milk",120],["cheese",30],["butter",5]],"Verse le lait, ajoute le fromage et laisse épaissir 3 min en remuant."],
+    ["ail","ail & fines herbes",[["garlic",3],["herbs",2],["oil",12]],"Ail haché et herbes 1 min dans l'huile, puis mélange le tout."],
+    ["coco","au lait de coco",[["coco",0.25],["curry",2]],"Ajoute le lait de coco et le curry, 5 min à feu doux."],
+    ["bbq","sauce barbecue",[["bbq",35],["oil",7]],"Nappe de sauce barbecue, 1–2 min dans la poêle."]
+  ];
+  const GV = [
+    ["legumes","légumes",[["veg",150]],"Légumes surgelés : 5 min au micro-ondes avec un fond d'eau, ou dans la poêle."],
+    ["epinards","épinards",[["spinach",60]],"Ajoute les épinards à la fin : ils fondent en 1 minute."],
+    ["carottes","carottes",[["carrot",1.5]],"Carottes en rondelles fines, 6 min à la poêle avec un fond d'eau."],
+    ["tomates","tomates",[["tomato",1],["onion",0.5]],"Oignon émincé 3 min à la poêle, puis la tomate en dés 2 min."]
+  ];
+  for(const p of GP) for(const s of GS) for(const st of GT) for(const v of GV){
+    const fixed = [...p[2], ...st[2], ...v[2]], rest = 920 - kc(fixed);
+    let q = rest / s[3];
+    q = s[0]==="wrap" ? Math.max(s[4], Math.min(s[5], Math.round(q))) : Math.max(s[4], Math.min(s[5], Math.round(q/10)*10));
+    const name = s[0]==="wrap" ? `Wraps ${p[1].toLowerCase()} ${st[1]} & ${v[1]}` : `${p[1]} ${st[1]}, ${s[1]} & ${v[1]}`;
+    const steps = [s[6], p[3], v[3], st[3], s[0]==="wrap" ? "Garnis les tortillas, roule-les serré et dore-les 1 min de chaque côté." : "Mélange le tout ou sers côte à côte. Pour le midi, mets en boîte et réchauffe 2–3 min au micro-ondes."];
+    add(`g_${p[0]}_${s[0]}_${st[0]}_${v[0]}`, "repas", [...p[2], [s[2], q], ...st[2], ...v[2]],
+      {name, time: (Math.max(p[4], s[7]) + 5) + " min", tools: [...new Set([...p[5], ...s[8]])], steps, gen:true});
+  }
+  const BB = [
+    ["porridge","Porridge",[["oats",90],["milk",300]],"Chauffe l'avoine et le lait 3–4 min en remuant (ou 2 min 30 au micro-ondes).",["Casserole"],["bpb","mpb","bm"]],
+    ["tartines","Tartines",[["bread",3],["milk",300]],"Toaste le pain, garnis, et bois un verre de lait avec.",["Grille-pain"],["bpb","mpb","avo","fro","bmi"]],
+    ["pancakes","Pancakes d'avoine",[["oats",70],["egg",2],["milk",150]],"Mixe l'avoine, les œufs et le lait 30 s, puis fais de petites crêpes, 2 min par côté.",["Blender","Poêle"],["bpb","mpb","bm"]],
+    ["yaourt","Yaourt grec & granola",[["yogurt",250],["oats",50]],"Fais dorer l'avoine 3 min à la poêle sèche, puis verse-la sur le yaourt.",["Poêle"],["bpb","mpb","bm"]],
+    ["oeufs","Œufs brouillés & tartines",[["egg",3],["bread",3]],"Œufs brouillés 2–3 min à feu doux, tartines grillées.",["Poêle","Grille-pain"],["avo","fro"]]
+  ];
+  const BT = {bpb:["banane & beurre de cacahuète",[["banana",1],["pb",25]]], mpb:["miel & beurre de cacahuète",[["honey",21],["pb",25]]], bm:["banane & miel",[["banana",1],["honey",21]]],
+              avo:["avocat",[["avocado",0.5]]], fro:["fromage",[["cheese",30]]], bmi:["beurre & miel",[["butter",10],["honey",21]]]};
+  for(const b of BB) for(const t of b[5]){ const T = BT[t];
+    add(`g_b_${b[0]}_${t}`, "matin", [...b[2], ...T[1]], {name:`${b[1]}, ${T[0]}`, time:"8 min", tools:b[4], steps:[b[3], `Ajoute ${T[0]} par-dessus.`], gen:true}); }
+  const SH = [["classique","banane & beurre de cacahuète",[["banana",1],["pb",20]]],["miel","miel & beurre de cacahuète",[["honey",21],["pb",25]]],["banane_miel","banane & miel",[["banana",1],["honey",21]]],["double","double beurre de cacahuète",[["pb",40]]]];
+  for(const s of SH) add(`g_s_${s[0]}`, "shake", [["milk",400],["oats",60], ...s[2]], {name:`Shake ${s[1]}`, time:"2 min", tools:["Blender"], steps:["Mets tout dans le blender, avoine en premier, mixe 30–40 secondes.","Verse dans ton shaker et garde-le au frais."], gen:true});
+})();
+
 /* ---------- Nutrition & quantités ---------- */
 const NUT = {};
 for(const k in RI){ NUT[k] = RI[k][1].reduce((a,[id,q]) => { const x = I[id], f = x[1]==="pc" ? q : q/100; return [a[0]+x[2]*f, a[1]+x[3]*f]; }, [0,0]).map(Math.round); }
 const R = {};
 for(const k in RI){ R[k] = Object.assign({t:RI[k][0], ing:RI[k][1], kcal:NUT[k][0], p:NUT[k][1]}, META[k]); }
+const GRP_IDS = {poisson:["tuna","salmon"], boeuf:["mince","steak","sausage"], porc:["pork","bacon"], poulet:["drum","breast","thigh"]};
+for(const k in R){ const ids = new Set(R[k].ing.map(x => x[0])); R[k].grp = Object.keys(GRP_IDS).find(g => GRP_IDS[g].some(i => ids.has(i))) || "vege"; }
+const MAC = {oats:[60,7], milk:[4.8,3.4], banana:[27,.4], pb:[15,50], honey:[82,0], egg:[.4,5], bread:[15,1.2], butter:[.1,81], drum:[0,7.5], breast:[0,2],
+  mince:[0,15], tuna:[0,11], rice:[79,.6], pasta:[72,1.5], noodles:[30,1], tortilla:[32,4.5], potato:[17,.1], passata:[5.5,.2], tomcan:[16,.4], beans:[45,1.5],
+  chick:[40,7], lentils:[50,1.5], veg:[9,.5], onion:[14,.2], carrot:[9,.2], salad:[3,.2], spinach:[3.6,.4], cheese:[1,33], oil:[0,100], soy:[5,0], chilli:[48,.2],
+  taco:[20,2], salmon:[0,13], steak:[0,6], pork:[0,20], sausage:[4,21], thigh:[0,5], yogurt:[4.5,8], sweet:[20,.1], coco:[12,72], avocado:[13,22], feta:[4,21],
+  bacon:[1,10], bun:[27,2.5], tomato:[4,.2], bbq:[37,.3]};
+for(const k in R){ let c = 0, f = 0; R[k].ing.forEach(([id,q]) => { const m = MAC[id]; if(!m) return; const x = I[id][1]==="pc" ? q : q/100; c += m[0]*x; f += m[1]*x; }); R[k].c = Math.round(c); R[k].f = Math.round(f); }
+const tF = () => Math.round(tK()*0.25/9), tC = () => Math.max(0, Math.round((tK() - tP()*4 - tF()*9)/4));
 const herQ0 = (id,q) => q * HER[I[id][4]];
 const herScaleCache = {};
 function herScale(){
@@ -914,7 +1175,7 @@ function fmtQty(id, q, shop){
 }
 
 /* ---------- Stockage (base de l'appli si dispo, sinon ce téléphone) ---------- */
-const S = { poids:{entries:[{d:"2026-09-26",kg:65}]}, repas:{days:{}}, choix:{swaps:{}}, reglages:{intro:true, budgetEur:50, pour2:true, theme:"auto", accent:"bordeaux", text:"normal", sound:false, anim:true, prenom:"", targetK:3300, targetP:150, volume:50, elle:"", devise:"aud", herOn:false, herK:1700, herP:110, herShow:true, goal:"masse", weighDay:0, avoid:[], hideShake:false, wake:true}, journal:{days:{}} };
+const S = { prix:{aldi:{}, coles:{}, woolworths:{}}, poids:{entries:[{d:"2026-09-26",kg:65}]}, repas:{days:{}}, choix:{swaps:{}}, reglages:{store:"aldi", intro:true, budgetEur:50, pour2:true, theme:"auto", accent:"bordeaux", text:"normal", sound:false, anim:true, prenom:"", targetK:3300, targetP:150, volume:50, elle:"", devise:"aud", herOn:false, herK:1700, herP:110, herShow:true, goal:"masse", weighDay:0, avoid:[], hideShake:false, wake:true}, journal:{days:{}} };
 let db = null, dbOk = false; const queue = {};
 function lsGet(k){ try { return JSON.parse(localStorage.getItem("pp-"+k) || "null"); } catch(e) { return null; } }
 function lsSet(k,v){ try { localStorage.setItem("pp-"+k, JSON.stringify(v)); } catch(e) {} }
@@ -947,7 +1208,14 @@ const menuOf = w => ((w % 4) + 4) % 4;
 const BLOCKS = [["b0",0,[0,2,4,6]],["b1",0,[1,3,5]],["la",1,[0,1,2]],["lb",1,[3,4,5,6]],["d0",3,[0,6]],["d1",3,[1,2,5]],["d2",3,[3]],["d3",3,[4]]];
 const menuBlocks = m => { const M = MENUS[m]; return {b0:M.b[0], b1:M.b[1], la:M.la, lb:M.lb, d0:M.d[0], d1:M.d[1], d2:M.d[2], d3:M.d[3]}; };
 const blockOf = (d,s) => BLOCKS.find(b => b[1]===s && b[2].includes(d));
-function rCost(k, two, s){ return R[k].ing.reduce((a,[id,q]) => { const p = P[id]; if(p[1]==null) return a; return a + (q + (two && s!==2 ? herQ(id,q) : 0))/p[1]*p[2]; }, 0); }
+const STORES = {aldi:"Aldi", coles:"Coles", woolworths:"Woolworths"};
+/* Prix d'un paquet : le tien si tu l'as saisi pour ce magasin, sinon le prix Aldi */
+function packPrice(id){
+  const st = S.reglages.store || "aldi", v = ((S.prix || {})[st] || {})[id];
+  if(v != null && v !== "") return [Number(v), "user"];
+  return [P[id][2], st === "aldi" ? (P[id][3] ? "est" : "aldi") : "fallback"];
+}
+function rCost(k, two, s){ return R[k].ing.reduce((a,[id,q]) => { const p = P[id]; if(p[1]==null) return a; return a + (q + (two && s!==2 ? herQ(id,q) : 0))/p[1]*packPrice(id)[0]; }, 0); }
 
 const planCache = {};
 const LUX = new Set(["saumon_riz","steak_patates","burger","poulet_coco","bowl_thon"]);
@@ -957,12 +1225,12 @@ const hasAvoid = (k, ids) => { ids = ids || avoidIds(); return R[k].ing.some(([i
 const act = s => !(s === 2 && S.reglages.hideShake);
 function planFor(w){
   const two = !!S.reglages.pour2, adapt = S.reglages.adapt !== false, budget = (Number(S.reglages.budgetEur)||0)*EUR_AUD, sw = S.choix.swaps || {};
-  const key = [w,two,adapt,budget,tK(),tP(),S.reglages.herOn?S.reglages.herK:0,(S.reglages.avoid||[]).join(","),S.reglages.hideShake?1:0,JSON.stringify(sw)].join("|");
+  const key = [w,two,adapt,budget,S.reglages.store||"aldi",JSON.stringify((S.prix||{})[S.reglages.store||"aldi"]||{}),tK(),tP(),S.reglages.herOn?S.reglages.herK:0,(S.reglages.avoid||[]).join(","),S.reglages.hideShake?1:0,JSON.stringify(sw)].join("|");
   if(planCache[key]) return planCache[key];
   const base = menuBlocks(menuOf(w)), eff = Object.assign({}, base), AV = avoidIds();
   /* Aliments à éviter : on remplace d'abord les plats concernés par le plus proche en calories */
   if(AV.size) for(const [bn,s] of BLOCKS){ if(!hasAvoid(eff[bn], AV)) continue; const type = s===0 ? "matin" : "repas", kc0 = R[eff[bn]].kcal;
-    const cands = Object.keys(R).filter(k => R[k].t === type && !hasAvoid(k, AV)).sort((a,b) => Math.abs(R[a].kcal-kc0) - Math.abs(R[b].kcal-kc0));
+    const cands = CURK.filter(k => R[k].t === type && !hasAvoid(k, AV)).sort((a,b) => Math.abs(R[a].kcal-kc0) - Math.abs(R[b].kcal-kc0));
     const pick = cands.find(k => !Object.values(eff).includes(k)) || cands[0]; if(pick){ eff[bn] = pick; base[bn] = pick; } }
   const wcost = e => { let c = 0, kc = 0, pr = 0;
     for(let d=0; d<7; d++) for(let s=0; s<4; s++){ if(!act(s)) continue; const k = sw[skey(w,d,s)] || (s===2 ? "shake" : e[blockOf(d,s)[0]]); c += rCost(k,two,s); kc += R[k].kcal; pr += R[k].p; }
@@ -972,7 +1240,7 @@ function planFor(w){
     for(let g=0; g<30 && c > budget + 0.01; g++){
       let best = null;
       for(const [bn,s] of BLOCKS){ const type = s===0 ? "matin" : "repas";
-        for(const k in R){ if(R[k].t !== type || k === eff[bn] || Object.values(eff).includes(k) || hasAvoid(k, AV)) continue;
+        for(const k of CURK){ if(R[k].t !== type || k === eff[bn] || Object.values(eff).includes(k) || hasAvoid(k, AV)) continue;
           const e2 = Object.assign({}, eff, {[bn]:k}), [c2,kc,pr] = wcost(e2);
           if(kc < tK()-100 || pr < tP()-10) continue;
           const save = c - c2; if(save > 0.01 && (!best || save > best[2])) best = [bn,k,save,c2]; } }
@@ -1030,31 +1298,42 @@ function renderDay(){
   let hk = 0, hp = 0; if(herVis){ eaten.forEach(s => { if(s===2) return; const n = herNut(keys[s]); hk += n[0]; hp += n[1]; }); hers.forEach(x => { hk += x.k; hp += x.p; }); hk = Math.round(hk); hp = Math.round(hp); }
   const isToday = iso(dateOf(wk,dayIdx)) === iso(today0);
   $("#summary").className = "sum2" + (enter?" enter":"");
+  const ec = eaten.reduce((a,s)=>a+R[keys[s]].c,0), ef = eaten.reduce((a,s)=>a+R[keys[s]].f,0);
+  const left = Math.max(0, tK()-ek), over = ek > tK();
+  const plannedK = keys.reduce((a,k,s) => a + (act(s) ? R[k].kcal : 0), 0) || 1;
+  const segs = keys.map((k,s) => act(s) ? `<span class="seg${eaten.includes(s)?" on":""}" style="flex:${R[k].kcal}" title="${MEAL_NAME[s]}"><i></i></span>` : "").join("");
+  const extra = mine.reduce((a,x)=>a+x.k,0);
+  const mpill = (l, v, t, ck) => `<span class="mp num"><b>${l}</b> <span data-count="${v}" data-ck="${ck}">${fmt(v)}</span><small>/${fmt(t)} g</small><i style="width:${t?Math.min(100,v/t*100):0}%"></i></span>`;
+  $("#summary").className = "hero" + (enter?" enter":"");
   $("#summary").innerHTML = `
-    <div class="top2"><span class="plan num">Prévu : ${fmt(kcal)} kcal · ${p} g protéines</span></div>
-    <div class="bars">
-      <div class="bar2"><div class="l num"><span><span data-count="${ek}" data-ck="ek">${fmt(ek)}</span> / ${fmt(tK())} kcal</span><span>${ek>=tK()?"Objectif atteint":"reste " + fmt(Math.max(0,tK()-ek))}</span></div><div class="meter"><i data-w="${Math.min(100,ek/tK()*100)}" data-mk="ek"></i></div></div>
-      <div class="bar2"><div class="l num"><span><span data-count="${ep}" data-ck="ep">${fmt(ep)}</span> / ${tP()} g protéines</span><span>${eaten.length}/${nSlots} repas${mine.length?` +${mine.length}`:""}</span></div><div class="meter"><i data-w="${Math.min(100,ep/tP()*100)}" data-mk="ep" style="background:var(--rose)"></i></div></div>
+    <div class="hero-top">
+      <div class="hero-main"><b class="big num" data-count="${over ? ek-tK() : left}" data-ck="left">${fmt(over ? ek-tK() : left)}</b><span class="sub">${over ? "kcal au-dessus de ton objectif" : "kcal à manger encore"}</span></div>
+      <div class="hero-side num"><b data-count="${ek}" data-ck="ek">${fmt(ek)}</b><span>sur ${fmt(tK())}</span></div>
     </div>
-    ${herVis ? `<div class="her"><div class="l num"><span><b>${esc(herName())}</b> · <span data-count="${hk}" data-ck="hk">${fmt(hk)}</span> / ${fmt(hK)} kcal</span><span>${fmt(hp)} / ${fmt(hP)} g prot.</span></div><div class="meter"><i data-w="${hK?Math.min(100,hk/hK*100):0}" data-mk="hk" style="background:var(--yolk)"></i></div></div>` : ""}`;
+    <div class="daystrip" aria-label="Repas mangés : ${eaten.length} sur ${nSlots}">${segs}${extra ? `<span class="seg on extra" style="flex:${extra}"><i></i></span>` : ""}</div>
+    <div class="mline">${mpill("P", ep, tP(), "ep")}${mpill("G", ec, tC(), "ec")}${mpill("L", ef, tF(), "ef")}</div>
+    ${herVis ? `<div class="hher num"><span>${esc(herName())}</span><span class="hbar"><i style="width:${hK?Math.min(100,hk/hK*100):0}%"></i></span><span>${fmt(hk)} / ${fmt(hK)} kcal</span></div>` : ""}`;
   const wd = document.getElementById("weighBanner"), isTodayW = iso(dateOf(wk,dayIdx)) === iso(today0);
   const needWeigh = isTodayW && dayIdx === Number(S.reglages.weighDay ?? 0) && !(S.poids.entries||[]).some(e => e.d === iso(today0));
   wd.hidden = !needWeigh;
-  if(needWeigh) wd.innerHTML = `<span>C'est ton jour de pesée. Pèse-toi le matin, à jeun.</span><button type="button" class="addbtn" id="goWeigh">Noter mon poids</button>`;
+  if(needWeigh) wd.innerHTML = `<span class="wtxt"><b>Jour de pesée</b><small>Le matin, à jeun</small></span><button type="button" class="addbtn" id="goWeigh">Noter</button>`;
   const pt = document.querySelector('.tabbar [data-v="poids"]'); if(pt) pt.classList.toggle("dot", needWeigh);
+  $("#timeline").className = "mlist";
   $("#timeline").innerHTML = keys.map((k,s) => {
     if(!act(s)) return "";
     const r = R[k], done = eaten.includes(s), sw = k !== baseFor(wk,dayIdx,s), cls = SLOTS[s][3];
-    return `<li class="row2 ${cls}${done?' eaten':''}${enter?' enter':''}${justToggled===s?' pop':''}" style="--i:${s+1}">
-      <button type="button" class="chk" data-eat="${s}" aria-pressed="${done}" aria-label="${done?"Annuler : ":"Marquer mangé : "}${esc(r.name)}"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></button>
-      <button type="button" class="info" data-r="${k}"><span class="sl">${SLOTS[s][0]}${sw?' · <span class="ch">changé</span>':(isEco(wk,dayIdx,s)?(LUX.has(k)&&!LUX.has(planFor(wk).base[blockOf(dayIdx,s)[0]])?' · <span class="lux">plaisir</span>':' · <span class="eco">budget</span>'):'')}</span><span class="nm">${esc(r.name)}</span><span class="mt num">${fmt(r.kcal)} kcal · ${r.p} g prot. · ${esc(r.time)}</span></button>
+    return `<li class="mrow ${cls}${done?' eaten':''}${enter?' enter':''}${justToggled===s?' pop':''}" style="--i:${s+1}">
+      <span class="mtime">${["Matin","Midi","16 h","Soir"][s]}</span>
+      <button type="button" class="info" data-r="${k}"><span class="nm">${esc(r.name)}</span><span class="mt num">${fmt(r.kcal)} kcal · ${r.p} g prot.</span></button>
       <button type="button" class="swp" data-swap="${s}" aria-label="Changer : ${esc(r.name)}"><svg viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg></button>
+      <button type="button" class="chk" data-eat="${s}" aria-pressed="${done}" aria-label="${done?"Annuler : ":"Marquer mangé : "}${esc(r.name)}"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></button>
     </li>`;
   }).join("");
   $("#journal").innerHTML = `
-    <div class="jh"><h3>Hors plan</h3><button type="button" class="addbtn" id="addFood">+ Ajouter un aliment</button></div>
+    ${jl.length ? `<div class="jh"><h3>Hors plan</h3><button type="button" class="addbtn" id="addFood">+ Ajouter</button></div>` : `<button type="button" class="add-line" id="addFood">+ J'ai mangé autre chose</button>`}
     ${jl.length ? `<ul class="jlist num">${jl.map((x,i) => `<li class="${justAdded && i===jl.length-1?'new':''}"><span class="n">${esc(x.n)}${(x.q || x.w==="h")?`<small>${x.w==="h" ? esc(herName()) + (x.q?" · ":"") : ""}${esc(x.q||"")}</small>`:""}</span><span class="k">${fmt(x.k)} kcal · ${fmt(x.p)} g</span><button type="button" data-jdel="${i}" aria-label="Supprimer ${esc(x.n)}">×</button></li>`).join("")}</ul>`
-      : `<p class="small">Un kebab, un café, une bière ? Ajoute-le, il compte dans ta journée.</p>`}`;
+      : ""}`;
+  $("#journal").classList.toggle("empty-j", !jl.length);
   document.querySelectorAll("#days button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i===dayIdx)));
   renderDaybar();
   justToggled = null; justAdded = false; fx();
@@ -1127,12 +1406,12 @@ $("#v-jour").addEventListener("click", e => {
 let lastFocus = null;
 function openSheet(cls, html){
   if($("#sheetWrap").hidden) lastFocus = document.activeElement;
-  if($("#sheetWrap").hidden) sfx("open");
+  if($("#sheetWrap").hidden){ openKind = sheetKind; sfx(sheetKind === "settings" ? "setopen" : "open"); } sheetKind = null;
   const sh = $("#sheet"); sh.className = "sheet " + cls; sh.innerHTML = html;
   $("#sheetWrap").hidden = false; document.body.classList.add("lock"); sh.scrollTop = 0;
   const c = sh.querySelector(".close"); if(c){ c.addEventListener("click", closeSheet); c.focus(); }
 }
-function closeSheet(){ const w = $("#sheetWrap"); if(w.hidden || w.classList.contains("closing")) return; w.classList.add("closing"); sfx("close"); const done = () => { keepAwake(false); w.classList.remove("closing"); w.hidden = true; document.body.classList.remove("lock"); if(lastFocus && document.contains(lastFocus)) lastFocus.focus(); }; if(reduced()) done(); else setTimeout(done, 190); }
+function closeSheet(){ const w = $("#sheetWrap"); if(w.hidden || w.classList.contains("closing")) return; w.classList.add("closing"); sfx(openKind === "settings" ? "setclose" : "close"); const done = () => { keepAwake(false); w.classList.remove("closing"); w.hidden = true; document.body.classList.remove("lock"); if(lastFocus && document.contains(lastFocus)) lastFocus.focus(); }; if(reduced()) done(); else setTimeout(done, 190); }
 $("#scrim").addEventListener("click", closeSheet);
 document.addEventListener("keydown", e => { if(e.key==="Escape" && !$("#sheetWrap").hidden) closeSheet(); });
 
@@ -1158,7 +1437,7 @@ function openRecipe(k){
       <span class="grab" aria-hidden="true"></span>
       <div class="row"><div style="display:grid;gap:4px"><span class="kind">${TYPE_LABEL[r.t]}${nWeek?` · ${nWeek} fois cette semaine`:""}</span><h2 id="sheetTitle">${esc(r.name)}</h2></div>
       <button class="close" type="button" aria-label="Fermer">×</button></div>
-      <div class="pills num"><span class="pill dark">${fmt(r.kcal)} kcal</span><span class="pill dark">${r.p} g prot.</span><span class="pill">${esc(r.time)}</span><span class="pill">ta portion</span></div>
+      <div class="pills num"><span class="pill dark">${fmt(r.kcal)} kcal</span><span class="pill dark">${r.p} g prot.</span><span class="pill">G ${r.c} g · L ${r.f} g</span><span class="pill">${esc(r.time)}</span><span class="pill">ta portion</span></div>
       <div class="segs">
         ${r.t!=="shake"?`<div class="seg" role="group" aria-label="Pour qui"><button type="button" data-who="moi" aria-pressed="${!deux}">Toi</button><button type="button" data-who="deux" aria-pressed="${deux}">${S.reglages.elle ? "+ " + esc(herName()) : "À deux"}</button></div>`:""}
         ${nWeek>1?`<div class="seg" role="group" aria-label="Quantités"><button type="button" data-n="1" aria-pressed="${mult===1}">1 repas</button><button type="button" data-n="${nWeek}" aria-pressed="${mult!==1}">Tout le batch (${nWeek})</button></div>`:""}
@@ -1174,8 +1453,11 @@ function openRecipe(k){
   $("#sheet").querySelectorAll("[data-n]").forEach(b => b.addEventListener("click", () => { sheetN = +b.dataset.n; openRecipe(k); }));
 }
 function openSwap(s){
-  const t = SLOTS[s][2], base = baseFor(wk,dayIdx,s), cur = recipeFor(wk,dayIdx,s);
-  const AVs = avoidIds(), opts = [base, ...Object.keys(R).filter(k => R[k].t === t && k !== base && !hasAvoid(k, AVs))];
+  const t = SLOTS[s][2], base = baseFor(wk,dayIdx,s), cur = recipeFor(wk,dayIdx,s), AVs = avoidIds(), k0 = R[cur].kcal;
+  const sugg = [base, ...CURK.filter(k => R[k].t === t && k !== base && !hasAvoid(k, AVs)).sort((a,b) => Math.abs(R[a].kcal-k0) - Math.abs(R[b].kcal-k0)).slice(0,6)];
+  if(!sugg.includes(cur)) sugg.splice(1,0,cur);
+  const opt = k => `<button type="button" class="opt ${SLOTS[s][3]}" data-pick="${k}" aria-pressed="${k===cur}">${k===base?'<span class="tag">Plan de base</span>':''}<span class="name">${esc(R[k].name)}</span><span class="meta num">${fmt(R[k].kcal)} kcal · ${R[k].p} g</span></button>`;
+  const pool = Object.keys(R).filter(k => R[k].t === t && !hasAvoid(k, AVs));
   openSheet(SLOTS[s][3], `
     <div class="sheet-head">
       <span class="grab" aria-hidden="true"></span>
@@ -1183,18 +1465,22 @@ function openSwap(s){
       <button class="close" type="button" aria-label="Fermer">×</button></div>
     </div>
     <div class="sheet-body">
-      <p class="v-sub">Choisis un autre plat. La liste de courses de la semaine se met à jour toute seule.</p>
-      <div class="opts">${opts.map(k => `<button type="button" class="opt ${SLOTS[s][3]}" data-pick="${k}" aria-pressed="${k===cur}">
-        ${k===base?'<span class="tag">Plan de base</span>':''}
-        <span class="name">${esc(R[k].name)}</span>
-        <span class="meta num">${fmt(R[k].kcal)} kcal · ${R[k].p} g prot. · ${esc(R[k].time)}</span></button>`).join("")}</div>
+      <input class="search" id="swq" type="search" placeholder="Chercher parmi ${fmt(pool.length)} recettes" autocomplete="off" aria-label="Chercher une recette">
+      <div class="opts" id="swl">${sugg.map(opt).join("")}</div>
     </div>`);
-  $("#sheet").querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => {
+  const norm = x => x.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const bind = () => $("#sheet").querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => {
     const swaps = Object.assign({}, S.choix.swaps || {}), key = skey(wk,dayIdx,s);
     if(b.dataset.pick === base) delete swaps[key]; else swaps[key] = b.dataset.pick;
     const cutoff = iso(addDays(today0,-60)); Object.keys(swaps).forEach(x => { if(x.slice(0,10) < cutoff) delete swaps[x]; });
-    S.choix = {swaps}; save("choix"); sfx("swap"); closeSheet(); renderDay(); renderShop(); renderPrep();
+    S.choix = {swaps}; save("choix"); sfx("swap"); closeSheet(); renderDay(); renderShop(); renderPrep(); renderRecipes();
   }));
+  bind();
+  $("#swq").addEventListener("input", e => {
+    const q = norm(e.target.value.trim()), words = q.split(/\s+/).filter(Boolean);
+    const list = !words.length ? sugg : pool.filter(k => { const n = norm(R[k].name); return words.every(w => n.includes(w)); }).slice(0,30);
+    $("#swl").innerHTML = list.length ? list.map(opt).join("") : `<p class="small">Aucune recette ne correspond.</p>`; bind();
+  });
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-r]"); if(b){ sheetWho = null; sheetN = 1; openRecipe(b.dataset.r); } });
 
@@ -1253,60 +1539,45 @@ function openFood(){
 }
 
 
-/* ---------- Sons « bulle » (une tonalité par onglet) ---------- */
-let AC = null, BUS = null, curView = "jour";
-const AREA = {jour:220, recettes:262, courses:196, poids:175, prep:233};
+/* ---------- Sons : deux sons très brefs ---------- */
+/* 1. Encoche de validation : toujours identique.  2. Clic clavier façon Apple : pour tout le reste. */
+let AC = null, BUS = null, NOISE = null, curView = "jour", sheetKind = null, openKind = null;
 function audio(){
   if(AC) return AC;
   AC = new (window.AudioContext || window.webkitAudioContext)();
-  const master = AC.createGain(), lp = AC.createBiquadFilter(), dl = AC.createDelay(), fb = AC.createGain(), wet = AC.createGain();
-  lp.type = "lowpass"; lp.frequency.value = 1800; lp.Q.value = 0.7;
-  dl.delayTime.value = 0.09; fb.gain.value = 0.18; wet.gain.value = 0.12;
-  lp.connect(master); lp.connect(dl); dl.connect(fb).connect(dl); dl.connect(wet).connect(master); master.connect(AC.destination);
-  BUS = {master, input: lp}; return AC;
+  const master = AC.createGain(); master.connect(AC.destination);
+  NOISE = AC.createBuffer(1, Math.floor(AC.sampleRate*0.03), AC.sampleRate);
+  const d = NOISE.getChannelData(0); for(let i=0; i<d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 3);
+  BUS = {master, input: master}; return AC;
 }
-/* Une bulle : note ronde dont la hauteur glisse vite (vers le haut = « bloop », vers le bas = « plop ») */
-function bubble(freq, at, opts){
-  const o = Object.assign({dur:.14, rise:1.7, gain:.35}, opts), t = AC.currentTime + at;
-  const osc = AC.createOscillator(), sub = AC.createOscillator(), v = AC.createGain(), vs = AC.createGain();
-  osc.type = "sine"; sub.type = "triangle";
-  osc.frequency.setValueAtTime(freq, t); osc.frequency.exponentialRampToValueAtTime(freq*o.rise, t + o.dur*0.6);
-  sub.frequency.setValueAtTime(freq/2, t); sub.frequency.exponentialRampToValueAtTime(freq/2*o.rise, t + o.dur*0.6);
-  v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(o.gain, t + 0.006); v.gain.exponentialRampToValueAtTime(0.0001, t + o.dur);
-  vs.gain.setValueAtTime(0.0001, t); vs.gain.exponentialRampToValueAtTime(o.gain*0.35, t + 0.006); vs.gain.exponentialRampToValueAtTime(0.0001, t + o.dur*0.8);
-  osc.connect(v).connect(BUS.input); sub.connect(vs).connect(BUS.input);
-  osc.start(t); sub.start(t); osc.stop(t + o.dur + 0.03); sub.stop(t + o.dur + 0.03);
+/* Clic clavier : un souffle très court, filtré dans les aigus (environ 15 ms) */
+function keyClick(){
+  const t = AC.currentTime, src = AC.createBufferSource(), bp = AC.createBiquadFilter(), hp = AC.createBiquadFilter(), v = AC.createGain();
+  src.buffer = NOISE; src.playbackRate.value = 1 + (Math.random()-.5)*0.04;
+  bp.type = "bandpass"; bp.frequency.value = 3600; bp.Q.value = 0.9;
+  hp.type = "highpass"; hp.frequency.value = 1200;
+  v.gain.setValueAtTime(0.55, t); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.014);
+  src.connect(bp).connect(hp).connect(v).connect(BUS.input); src.start(t); src.stop(t + 0.03);
 }
-/* Note simple et douce, sans glissé (sons de navigation) */
-function note(freq, at, dur, gain){
-  const t = AC.currentTime + at;
-  [[1,1],[2,.12]].forEach(([m,g]) => {
-    const o = AC.createOscillator(), v = AC.createGain();
-    o.type = "sine"; o.frequency.setValueAtTime(freq*m, t);
-    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(gain*g, t + 0.012); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(v).connect(BUS.input); o.start(t); o.stop(t + dur + 0.03);
-  });
+/* Encoche de validation : petit « tic » net et un peu tonal (environ 25 ms), toujours le même */
+function notch(){
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = "sine"; o.frequency.setValueAtTime(1800, t); o.frequency.exponentialRampToValueAtTime(1300, t + 0.018);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.026);
+  o.connect(g).connect(BUS.input); o.start(t); o.stop(t + 0.035);
+  const src = AC.createBufferSource(), bp = AC.createBiquadFilter(), v = AC.createGain();
+  src.buffer = NOISE; bp.type = "bandpass"; bp.frequency.value = 4800; bp.Q.value = 1.2;
+  v.gain.setValueAtTime(0.3, t); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.008);
+  src.connect(bp).connect(v).connect(BUS.input); src.start(t); src.stop(t + 0.02);
 }
-function sfx(kind, force, area){
+const VALID = new Set(["meal","check","add","weight","swap"]);
+function sfx(kind, force){
   const r = S.reglages; if(!force && !r.sound) return;
   try {
     audio(); if(AC.state === "suspended") AC.resume();
-    BUS.master.gain.value = 0.5 * ((r.volume ?? 50) / 100);
-    const b = AREA[area || curView] || 220, B = (f,t,o) => bubble(b*f, t, o);
-    switch(kind){
-      case "meal":    bubble(130,0,{dur:.6,rise:6.5,gain:.32}); bubble(760,.42,{dur:.3,rise:1.3,gain:.14}); break;             /* repas mangé : une bulle qui part du grave et file vers l'aigu */
-      case "check":   B(1.25,0,{dur:.3,rise:1.6,gain:.3}); B(1.5,.12,{dur:.42,rise:1.8,gain:.3}); break;                         /* ~0,5 s, monte */
-      case "uncheck": B(1.5,0,{dur:.45,rise:.55,gain:.26}); break;                                                             /* glisse vers le bas */
-      case "add":     B(1,0,{dur:.3,gain:.26}); B(1.25,.1,{dur:.3,gain:.26}); B(1.5,.2,{dur:.32,gain:.27}); B(2,.32,{dur:.55,rise:1.4,gain:.24}); break; /* cascade ~0,9 s */
-      case "weight":  B(1,0,{dur:.5,rise:1.25,gain:.26}); B(1.26,.16,{dur:.5,rise:1.25,gain:.24}); B(1.5,.32,{dur:.8,rise:1.2,gain:.24}); break;            /* accord posé ~1,1 s */
-      case "swap":    B(1.5,0,{dur:.28,rise:.75,gain:.25}); B(1.12,.16,{dur:.38,rise:1.7,gain:.27}); break;                    /* va-et-vient */
-      case "delete":  B(1.33,0,{dur:.3,rise:.7,gain:.24}); B(1,.14,{dur:.45,rise:.6,gain:.22}); break;                          /* deux plops qui descendent */
-      case "open":    note(b*2.5,0,.32,.2); break;                                                                                /* ouverture : note simple */
-      case "close":   note(b*2,0,.28,.14); break;
-      case "toggle":  B(1.12,0,{dur:.3,rise:1.5,gain:.22}); B(1.12,.13,{dur:.3,rise:1.5,gain:.18}); break;                      /* double bulle */
-      case "tab":     note(b*2.5,0,.34,.2); break;                                                                                /* changement d'espace : note simple, hauteur selon l'onglet */
-      default:        B(1,0,{dur:.32,rise:1.5,gain:.22});
-    }
+    BUS.master.gain.value = 0.6 * ((r.volume ?? 50) / 100);
+    VALID.has(kind) ? notch() : keyClick();
   } catch(e) {}
 }
 
@@ -1314,13 +1585,13 @@ function sfx(kind, force, area){
 const ACCENTS = {bordeaux:["Bordeaux","#7A1F2B","#9E3242"], cobalt:["Bleu","#2F3CFF","#6770FF"], foret:["Forêt","#2E5E4E","#4F9277"], prune:["Prune","#5B2A6E","#9459AD"]};
 /* Thèmes complets : [clair, sombre] → paper, surface, ink, muted, line, brand, yolk, coral, rose, sage */
 const THEMES = {
-  bordeaux:[["#FBF6F0","#FFFFFF","#241817","#6E5B57","#EBDFD6","#7A1F2B","#EBA844","#E0724F","#F0B9B2","#A9BF93"],
+  bordeaux:[["#F5F4F2","#FFFFFF","#1D1A19","#6F6866","#E9E6E3","#7A1F2B","#EBA844","#E0724F","#F0B9B2","#A9BF93"],
             ["#17100F","#221818","#F5ECE6","#B9A8A2","#3A2B2A","#9E3242","#F0B456","#EA8363","#F2C2BC","#B6CBA1"]],
-  cobalt:  [["#F3F5FB","#FFFFFF","#151A2E","#5B6380","#DDE2EF","#2F3CFF","#FFC43D","#FF7A59","#B9A6FF","#5ED3A6"],
+  cobalt:  [["#F4F5F8","#FFFFFF","#171A26","#636A7E","#E3E6EE","#2F3CFF","#FFC43D","#FF7A59","#B9A6FF","#5ED3A6"],
             ["#0E1020","#181B30","#EEF0FA","#A0A6C0","#2A2E48","#6770FF","#FFCB55","#FF8A6C","#C3B3FF","#6EDDB2"]],
-  foret:   [["#F2F5EF","#FFFFFF","#17221B","#5A6B5F","#DCE4D8","#2E5E4E","#E3B23C","#D9774F","#E8B4A0","#8DB580"],
+  foret:   [["#F3F5F3","#FFFFFF","#18201B","#626C65","#E2E7E3","#2E5E4E","#E3B23C","#D9774F","#E8B4A0","#8DB580"],
             ["#0F1512","#18211C","#E8EFE9","#9DB0A3","#2A3830","#4F9277","#EBBE52","#E38A64","#EBC0AE","#9DC291"]],
-  prune:   [["#F7F2F7","#FFFFFF","#22162A","#6C5A72","#E7DCE9","#5B2A6E","#F2B84B","#E86F7E","#CDB4F0","#9CC7B8"],
+  prune:   [["#F6F4F7","#FFFFFF","#1F1A23","#6B6371","#E8E4EB","#5B2A6E","#F2B84B","#E86F7E","#CDB4F0","#9CC7B8"],
             ["#150F18","#211827","#F3EAF5","#B7A6BE","#382A3F","#9459AD","#F4C261","#EE8390","#D7C2F3","#A9D1C3"]]
 };
 const TOK = ["--paper","--surface","--ink","--muted","--line","--brand","--yolk","--coral","--rose","--sage"];
@@ -1449,18 +1720,19 @@ function openSettings(page){
       </div>`;
     if(page === "apropos") body = `
       <div class="set-card" style="padding-block:12px;display:grid;gap:8px">
-        <p><b>Poids plume</b> · version 2.4</p>
+        <p><b>Poids plume</b> · version 3.0</p>
         <p class="small">Prix Aldi relevés sur aldi.com.au le 27 septembre 2026 ; « ~ » = prix estimé. Calories et protéines calculées avec des valeurs nutritionnelles moyennes : c'est la balance qui dit s'il faut ajuster.</p>
-        <p class="small">Menus sur 4 semaines, qui tournent chaque lundi depuis le 28 septembre 2026. ${Object.keys(R).length} recettes.</p>
+        <p class="small">Menus sur 4 semaines, qui tournent chaque lundi depuis le 28 septembre 2026. ${fmt(Object.keys(R).length)} recettes, dont ${CURK.length} écrites à la main et les autres assemblées à partir de combinaisons (protéine, féculent, sauce, légumes).</p>
       </div>`;
   }
   const head = page
     ? `<div class="row"><div style="display:grid;gap:4px"><button type="button" class="back" data-page="">‹ Paramètres</button><h2 id="sheetTitle">${esc(title)}</h2></div><button class="close" type="button" aria-label="Fermer">×</button></div>`
     : `<div class="row"><div style="display:grid;gap:4px"><span class="kind">${r.prenom ? "Salut " + esc(r.prenom) : "Poids plume"}</span><h2 id="sheetTitle">Paramètres</h2></div><button class="close" type="button" aria-label="Fermer">×</button></div>`;
+  sheetKind = "settings";
   openSheet("k-shake", `<div class="sheet-head"><span class="grab" aria-hidden="true"></span>${head}</div><div class="sheet-body settings${page?" sub":""}">${body}</div>`);
   const sh = $("#sheet"), on = (id, ev, fn) => { const el = sh.querySelector(id); if(el) el.addEventListener(ev, fn); };
   replay(sh.querySelector(".sheet-body"), page ? "slide-in" : "slide-back");
-  sh.querySelectorAll("[data-page]").forEach(b => b.addEventListener("click", () => { sfx("tab"); openSettings(b.dataset.page || null); }));
+  sh.querySelectorAll("[data-page]").forEach(b => b.addEventListener("click", () => { sfx("key"); openSettings(b.dataset.page || null); }));
   sh.querySelectorAll("[data-set]").forEach(b => b.addEventListener("click", () => {
     const k = b.dataset.set, v = b.dataset.val;
     if(k === "goal"){ const G = GOALS[v]; setPref({goal:v, targetK:G.k, targetP:G.p}); renderPlanViews(); renderWeight(); sfx("toggle"); openSettings("profil"); return; }
@@ -1517,28 +1789,46 @@ function openSettings(page){
 $("#gear").addEventListener("click", () => openSettings(null));
 
 /* ---------- Recettes ---------- */
+let rq = "", rt = "repas", rg = "all", rlim = 25;
+const normR = x => x.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const GROUPS = [["poulet","Poulet","k-midi"],["boeuf","Bœuf","k-soir"],["porc","Porc","k-shake"],["poisson","Poisson","k-matin"],["vege","Végé & œufs","k-soir"]];
+const ING_TXT = {}; for(const k in R) ING_TXT[k] = normR(R[k].name + " " + R[k].ing.map(([id]) => I[id][0]).join(" "));
 function renderRecipes(){
-  const wkKeys = []; for(let d=0; d<7; d++) for(let s=0; s<4; s++){ if(!act(s)) continue; const k = recipeFor(wk,d,s); if(!wkKeys.includes(k)) wkKeys.push(k); }
-  const tile = (k,i) => { const r = R[k]; return `<button class="rtile ${TYPE_CLS[r.t]}${enter?" enter":""}" type="button" data-r="${k}" data-t="${r.t}" style="--i:${i%8}"><span class="kind">${TYPE_LABEL[r.t]}${LUX.has(k)?" · plaisir":""}</span><span class="name">${esc(r.name)}</span><span class="meta num"><span>${fmt(r.kcal)} kcal</span><span>${r.p} g</span></span></button>`; };
-  const others = Object.keys(R).filter(k => !wkKeys.includes(k));
-  $("#rweek").innerHTML = wkKeys.map(tile).join("");
-  $("#rgrid").innerHTML = others.map(tile).join("");
-  $("#rweekTitle").textContent = `Au menu · semaine ${menuOf(wk)+1} (${weekStart(wk).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})`;
-  $("#rothersTitle").textContent = `Autres recettes (${others.length})`;
-  const f = (document.querySelector('#filters [aria-pressed="true"]') || {}).dataset?.f || "all";
-  document.querySelectorAll(".rtile").forEach(t => t.hidden = !(f==="all" || t.dataset.t===f));
+  const AVs = avoidIds();
+  const row = k => { const r = R[k]; return `<li><button type="button" class="rrow ${TYPE_CLS[r.t]}" data-r="${k}"><span class="rdot"></span><span class="rn">${esc(r.name)}<small class="num">${fmt(r.kcal)} kcal · ${r.p} g de protéines · ${esc(r.time)}</small></span><span class="rch" aria-hidden="true">›</span></button></li>`; };
+  const card = k => { const r = R[k]; return `<button type="button" class="wcard ${TYPE_CLS[r.t]}" data-r="${k}"><span class="wt">${r.t==="matin"?"Petit-déj":r.t==="shake"?"Collation":"Repas"}</span><span class="wn">${esc(r.name)}</span><span class="wk num">${fmt(r.kcal)} kcal</span></button>`; };
+  const words = normR(rq.trim()).split(/\s+/).filter(Boolean), searching = words.length > 0, inCat = rg !== "all";
+  const base = k => R[k].t === rt && !hasAvoid(k, AVs);
+  /* Accueil rangé */
+  $("#rhome").hidden = searching || inCat; $("#rresults").hidden = !(searching || inCat);
+  if(!searching && !inCat){
+    const wkKeys = []; for(let d=0; d<7; d++) for(let s=0; s<4; s++){ if(!act(s)) continue; const k = recipeFor(wk,d,s); if(R[k].t === rt && !wkKeys.includes(k)) wkKeys.push(k); }
+    $("#rbWeek").hidden = !wkKeys.length;
+    $("#rweek").innerHTML = wkKeys.map(card).join(""); $("#rweekCount").textContent = wkKeys.length ? `${wkKeys.length} plat${wkKeys.length>1?"s":""}` : "";
+    $("#rbCats").hidden = rt !== "repas";
+    if(rt === "repas") $("#rcats").innerHTML = GROUPS.map(([g,l,cls]) => { const n = Object.keys(R).filter(k => base(k) && R[k].grp === g).length; return `<button type="button" class="cat ${cls}" data-cat="${g}"><b>${l}</b><span class="num">${fmt(n)} recettes</span></button>`; }).join("");
+    const classics = rt === "repas" ? CURK.filter(k => base(k)) : Object.keys(R).filter(k => base(k));
+    classics.sort((a,b) => R[a].name.localeCompare(R[b].name, "fr"));
+    $("#rclassicTitle").textContent = rt === "repas" ? "Les classiques" : rt === "matin" ? "Tous les petits-déj" : "Toutes les collations";
+    $("#rclassicCount").textContent = `${classics.length}`;
+    $("#rclassic").innerHTML = classics.map(row).join("");
+    return;
+  }
+  /* Résultats : recherche ou catégorie */
+  const res = Object.keys(R).filter(k => base(k) && (!inCat || R[k].grp === rg) && (!searching || words.every(w => ING_TXT[k].includes(w))));
+  res.sort((a,b) => (R[a].gen?1:0) - (R[b].gen?1:0) || R[a].name.localeCompare(R[b].name, "fr"));
+  const catName = inCat ? (GROUPS.find(g => g[0]===rg) || [,""])[1] : "";
+  $("#rcount").textContent = `${catName ? catName + " · " : ""}${fmt(res.length)} recette${res.length>1?"s":""}`;
+  $("#rgrid").innerHTML = res.length ? res.slice(0, rlim).map(row).join("") : `<li class="small" style="padding:14px">Aucune recette ne correspond. Essaie un autre mot.</li>`;
+  $("#rmore").hidden = res.length <= rlim;
+  $("#rmore").textContent = `Voir plus (${fmt(res.length - Math.min(rlim, res.length))})`;
 }
-const _unusedTiles = () => Object.entries(R).map(([k,r],i) => `
-  <button class="rtile ${TYPE_CLS[r.t]} enter" style="--i:${i%8}" type="button" data-r="${k}" data-t="${r.t}">
-    <span class="kind">${TYPE_LABEL[r.t]}</span>
-    <span class="name">${esc(r.name)}</span>
-    <span class="meta num"><span>${fmt(r.kcal)} kcal</span><span>${r.p} g</span></span>
-  </button>`).join("");
-const fbtns = [...document.querySelectorAll("#filters button")];
-fbtns.forEach(b => b.addEventListener("click", () => {
-  fbtns.forEach(x => x.setAttribute("aria-pressed", String(x===b)));
-  let n = 0; document.querySelectorAll(".rtile").forEach(t => { t.hidden = !(b.dataset.f==="all" || t.dataset.t===b.dataset.f); if(!t.hidden){ replay(t, "enter"); t.style.setProperty("--i", n++ % 8); } });
-}));
+let rTimer = null;
+$("#rsearch").addEventListener("input", e => { clearTimeout(rTimer); rTimer = setTimeout(() => { rq = e.target.value; rlim = 25; renderRecipes(); }, 150); });
+$("#rmore").addEventListener("click", () => { rlim += 25; renderRecipes(); });
+$("#rback").addEventListener("click", () => { rq = ""; rg = "all"; $("#rsearch").value = ""; rlim = 25; renderRecipes(); sfx("key"); window.scrollTo(0,0); });
+document.querySelectorAll("#rtype button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#rtype button").forEach(x => x.setAttribute("aria-pressed", String(x===b))); rt = b.dataset.f; rg = "all"; rlim = 25; renderRecipes(); sfx("toggle"); }));
+$("#rcats").addEventListener("click", e => { const c = e.target.closest("[data-cat]"); if(!c) return; rg = c.dataset.cat; rlim = 25; renderRecipes(); sfx("key"); window.scrollTo(0,0); });
 
 /* ---------- Courses & budget ---------- */
 function weekTotals(){
@@ -1565,31 +1855,52 @@ function renderShop(){
   Object.keys(tot).forEach(id => {
     const p = P[id], need = tot[id];
     if(p[1] == null){ rows.placard.push({id, fr:I[id][0], en:p[0], need:"", price:null}); return; }
-    const packs = Math.ceil(need/p[1] - 1e-9); used += need/p[1]*p[2]; till += packs*p[2];
-    rows[p[5]].push({id, fr:I[id][0], en:p[0], need:fmtQty(id,need,true), packs, price:packs*p[2], est:p[3], stock:p[4]});
+    const [pp, src] = packPrice(id), packs = Math.ceil(need/p[1] - 1e-9); used += need/p[1]*pp; till += packs*pp;
+    rows[p[5]].push({id, fr:I[id][0], en:p[0], need:fmtQty(id,need,true), packs, price:packs*pp, src, stock:p[4]});
   });
   const eur = Number(S.reglages.budgetEur) || 0, aud = eur*EUR_AUD, over = used > aud;
   $("#budget").innerHTML = `
     <div class="big"><b class="num" data-count="${used}" data-ck="used" data-money="1">${money(used)}</b><span class="num">${S.reglages.devise==="eur" ? "≈ " + fmt(Math.round(used)) + " $" : "≈ " + fmt(Math.round(used/EUR_AUD)) + " €"} / semaine${S.reglages.pour2?" · à deux":""}</span></div>
     <div class="bmeter${over?' over':''}"><i data-w="${aud?Math.min(100,used/aud*100):100}" data-mk="budget"></i></div>
     <div class="bline num"><span class="bset"><label for="beur">Budget</label><input id="beur" type="number" inputmode="numeric" min="0" step="5" value="${eur}"> €</span>${over?`<span class="warn">+${money(used-aud)}</span>`:`<span>reste ${money(aud-used)}</span>`}</div>
-    <label class="mini-toggle" for="adapt"><input type="checkbox" id="adapt" role="switch"${S.reglages.adapt!==false?" checked":""}><i aria-hidden="true"></i><span>Adapter les menus à mon budget</span></label>
-    ${ecoMsg()}
-    <details class="more"><summary>Comment c'est calculé</summary><p class="small">Le coût compte seulement ce que vous mangez dans la semaine. Placard vide, le premier plein fait environ ${money(till)} : l'avoine, le riz, le fromage et les sauces durent plusieurs semaines. Prix Aldi du 27 sept. 2026, « ~ » = estimé. 1 € = ${String(EUR_AUD).replace(".",",")} $.</p></details>`;
+    ${S.reglages.pour2 ? "" : ""}
+    <details class="more"><summary>Détails${(() => { const pl = planFor(wk), n = BLOCKS.filter(([bn]) => pl.eff[bn] !== pl.base[bn]).length; return n && S.reglages.adapt !== false ? ` · ${n} plat${n>1?"s":""} ajusté${n>1?"s":""} au budget` : ""; })()}</summary>${ecoMsg()}<p class="small">Le coût compte seulement ce que vous mangez dans la semaine. Placard vide, le premier plein fait environ ${money(till)} : l'avoine, le riz, le fromage et les sauces durent plusieurs semaines. Prix Aldi vérifiés le 26 oct. 2026, « ~ » = estimé, prix en gris = prix Aldi utilisé faute de prix saisi pour ce magasin. 1 € = ${String(EUR_AUD).replace(".",",")} $.</p></details>`;
   $("#beur").addEventListener("change", e => { S.reglages = Object.assign({}, S.reglages, {budgetEur: Math.max(0, Number(e.target.value)||0)}); save("reglages"); renderPlanViews(); });
-  $("#adapt").addEventListener("change", e => { S.reglages = Object.assign({}, S.reglages, {adapt: e.target.checked}); save("reglages"); renderPlanViews(); });
+
   const ckKey = "courses-" + iso(weekStart(wk)); let checked = lsGet(ckKey) || {};
   $("#shop").innerHTML = AISLES.filter(a => rows[a[0]].length).map(([a,label,cls],i) => `
     <div class="aisle ${cls}${enter?' enter':''}" style="--i:${i}"><h3><i></i>${esc(label)}</h3><ul>${rows[a].sort((x,y)=>(y.price||0)-(x.price||0)).map(it => `
       <li><label for="c-${it.id}"><input type="checkbox" id="c-${it.id}" data-k="${it.id}"${checked[it.id]?" checked":""}>
         <span class="it">${esc(it.fr)}${it.stock?'<span class="stock">stock</span>':''}<span class="en">${esc(it.en)}</span></span>
-        <span class="qty num">${it.need?`<span class="need">${esc(it.need)}</span>`:""}${it.price!=null?`<span class="price${it.est?' est':''}">${it.est?"~ ":""}${money(it.price)}${it.packs>1?` <small>(${it.packs})</small>`:""}</span>`:""}</span></label></li>`).join("")}</ul></div>`).join("");
+        <span class="qty num">${it.need?`<span class="need">${esc(it.need)}</span>`:""}${it.price!=null?`<button type="button" class="price p-${it.src}" data-price="${it.id}" aria-label="Modifier le prix : ${esc(it.fr)}">${it.src==="est"?"~ ":""}${money(it.price)}${it.packs>1?` <small>(${it.packs})</small>`:""}</button>`:""}</span></label></li>`).join("")}</ul></div>`).join("");
   const boxes = [...document.querySelectorAll("#shop input")];
   const upd = () => { const n = boxes.filter(b=>b.checked).length; $("#progress").textContent = `${n} / ${boxes.length} dans le caddie`; $("#barfill").style.width = (boxes.length?100*n/boxes.length:0)+"%"; };
   boxes.forEach(b => b.addEventListener("change", () => { checked[b.dataset.k] = b.checked; lsSet(ckKey, checked); sfx(b.checked ? "check" : "uncheck"); upd(); }));
   $("#reset").onclick = () => { boxes.forEach(b=>b.checked=false); checked = {}; lsSet(ckKey, checked); upd(); };
   upd(); fx();
+  $("#shop").querySelectorAll("[data-price]").forEach(b => b.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); openPrice(b.dataset.price); }));
+  const st = S.reglages.store || "aldi", nUser = Object.keys((S.prix||{})[st] || {}).length, nTot = Object.keys(tot).filter(id => P[id][1] != null).length;
+  $("#storeNote").textContent = st === "aldi" ? `Prix Aldi vérifiés le 26 oct. 2026 · touche un prix pour le corriger` : `${nUser ? nUser + " prix " + STORES[st] + (nUser>1?" saisis":" saisi") : "Aucun prix " + STORES[st] + " saisi"} · les autres sont ceux d'Aldi, en gris. Touche un prix pour entrer celui de ${STORES[st]}.`;
+  document.querySelectorAll("#storeSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.store === st)));
 }
+function openPrice(id){
+  const st = S.reglages.store || "aldi", p = P[id], cur = ((S.prix||{})[st]||{})[id];
+  openSheet("k-midi", `
+    <div class="sheet-head"><span class="grab" aria-hidden="true"></span>
+      <div class="row"><div style="display:grid;gap:4px"><span class="kind">Prix chez ${STORES[st]}</span><h2 id="sheetTitle">${esc(I[id][0])}</h2></div><button class="close" type="button" aria-label="Fermer">×</button></div>
+    </div>
+    <div class="sheet-body">
+      <p class="small">Paquet de référence : <b>${esc(p[0])}</b>. Entre le prix de ce paquet (ou d'un paquet équivalent) chez ${STORES[st]}, en $.</p>
+      <div class="set-card"><div class="set-row"><label for="pIn">Prix du paquet<small>Prix Aldi : ${money(p[2])}</small></label><input class="set-in num" id="pIn" type="number" inputmode="decimal" min="0" step="0.01" placeholder="${p[2].toFixed(2)}" value="${cur ?? ""}"></div></div>
+      <button type="button" class="primary" id="pSave">Enregistrer</button>
+      ${cur != null ? `<button type="button" class="ghost2" id="pReset">Revenir au prix Aldi</button>` : ""}
+    </div>`);
+  setTimeout(() => { const i = $("#pIn"); if(i) i.focus(); }, 300);
+  const store = (v) => { const all = Object.assign({aldi:{}, coles:{}, woolworths:{}}, S.prix || {}); all[st] = Object.assign({}, all[st]); if(v == null) delete all[st][id]; else all[st][id] = v; S.prix = all; save("prix"); };
+  $("#pSave").addEventListener("click", () => { const v = Math.round(parseFloat(String($("#pIn").value).replace(",", "."))*100)/100; if(!(v >= 0)) return; store(v); sfx("check"); closeSheet(); renderPlanViews(); });
+  const r = $("#pReset"); if(r) r.addEventListener("click", () => { store(null); sfx("delete"); closeSheet(); renderPlanViews(); });
+}
+document.querySelectorAll("#storeSeg button").forEach(b => b.addEventListener("click", () => { S.reglages = Object.assign({}, S.reglages, {store: b.dataset.store}); save("reglages"); sfx("toggle"); renderPlanViews(); }));
 $("#pour2").addEventListener("change", e => { S.reglages = Object.assign({}, S.reglages, {pour2: e.target.checked}); save("reglages"); renderPlanViews(); });
 
 /* ---------- Prep ---------- */
