@@ -343,6 +343,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .surprise{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;text-align:left;border:0;border-radius:16px;padding:10px 12px;background:var(--brand);color:#fff;cursor:pointer}
 .surprise svg{width:40px;height:40px;padding:9px;border-radius:12px;background:rgba(255,255,255,.16)}
 .surprise span{display:grid;gap:1px}.surprise small{opacity:.85;font-weight:600;font-size:.78rem}
+.surprise.alt{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.surprise.alt svg{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand);fill:none}
+.surprise.alt svg path{stroke:currentColor}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:14px;font-weight:700;font-size:.86rem;z-index:60;max-width:calc(100vw - 32px);text-align:center;transition:opacity .2s,transform .2s}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .qty-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -6505,7 +6508,7 @@ function renderDay(){
     return `<li class="mrow ${cls}${done?' eaten':''}${enter?' enter':''}${justToggled===s?' pop':''}${rolled===s?' rolled':''}" style="--i:${s+1}">
       <span class="mtime">${["Matin","Midi","16 h","Soir"][s]}</span>
       <button type="button" class="info" data-r="${k}"><span class="nm">${esc(r.name)}</span><span class="mt num">${fmt(r.kcal)} kcal · ${r.p} g prot.</span></button>
-      <button type="button" class="dice${rolled===s?' spin':''}" data-dice="${s}" aria-label="Plat au hasard à la place de : ${esc(r.name)}" title="Plat au hasard"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="12" cy="12" r="1.2"/></svg></button>
+      <button type="button" class="dice${rolled===s?' spin':''}" data-dice="${s}" aria-label="Plat au hasard avec ce que tu as, à la place de : ${esc(r.name)}" title="Plat au hasard avec ce que tu as"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="12" cy="12" r="1.2"/></svg></button>
       <button type="button" class="swp" data-swap="${s}" aria-label="Changer : ${esc(r.name)}"><svg viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg></button>
       <button type="button" class="chk" data-eat="${s}" aria-pressed="${done}" aria-label="${done?"Annuler : ":"Marquer mangé : "}${esc(r.name)}"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></button>
     </li>`;
@@ -6662,11 +6665,40 @@ function applySwap(s, d, k){
   const cutoff = iso(addDays(today0,-60)); Object.keys(swaps).forEach(x => { if(x.slice(0,10) < cutoff) delete swaps[x]; });
   S.choix = {swaps}; save("choix");
 }
-function diceSlot(s){
-  const k = rollDice(s, dayIdx); if(!k) return;
+/* Avec ce que tu as acheté : les articles cochés de la liste de la semaine (ou toute la liste si rien n'est coché) + le placard */
+function pantry(){
+  const tot = weekTotals(), checked = lsGet("courses-" + iso(weekStart(wk))) || {};
+  const ticked = Object.keys(checked).filter(id => checked[id] && P[id]);
+  const have = new Set(ticked.length ? ticked : Object.keys(tot));
+  Object.keys(P).forEach(id => { if(P[id][1] == null) have.add(id); });
+  return have;
+}
+function rollPantry(s, d){
+  const t = SLOTS[s][2], cur = recipeFor(wk,d,s), base = baseFor(wk,d,s), AVs = avoidIds(), have = pantry();
+  const kMin = R[base].kcal * 0.85, pMin = R[base].p * 0.75;
+  const miss = k => [...new Set(R[k].ing.map(x => x[0]).filter(id => !have.has(id)))];
+  const all = Object.keys(R).filter(k => R[k].t === t && k !== cur && !hasAvoid(k, AVs) && R[k].kcal >= kMin && R[k].p >= pMin);
+  const full = [], one = [];
+  all.forEach(k => { const m = miss(k); if(!m.length) full.push(k); else if(m.length === 1 && P[m[0]][2] != null && P[m[0]][2] <= 4.5) one.push(k); });
+  const pickFrom = list => { let pool = list.filter(k => !diceSeen.has(k)); if(!pool.length){ list.forEach(k => diceSeen.delete(k)); pool = list; }
+    const orig = pool.filter(k => R[k].orig), other = pool.filter(k => !R[k].orig);
+    const from = orig.length && (Math.random() < 0.8 || !other.length) ? orig : other;
+    const k = from[Math.floor(Math.random()*from.length)]; diceSeen.add(k); return k; };
+  /* 7 fois sur 10 : un plat que tu peux faire tout de suite ; sinon un plat où il ne manque qu'un seul ingrédient pas cher */
+  if(full.length && (!one.length || Math.random() < 0.7)) return [pickFrom(full), []];
+  if(one.length){ const k = pickFrom(one); return [k, miss(k)]; }
+  return null;
+}
+function diceSlot(s, mode){
+  let k = null, missing = null;
+  if(mode !== "surprise"){ const r = rollPantry(s, dayIdx); if(r){ k = r[0]; missing = r[1]; } }
+  if(!k){ if(mode === "pantry") toast("Rien d'autre ne se fait avec ce que tu as. Essaie « Surprends-moi »."); if(mode === "pantry") return; k = rollDice(s, dayIdx); }
+  if(!k) return;
   const before = JSON.stringify(planFor(wk).eff);
   applySwap(s, dayIdx, k); sfx("swap");
-  if(JSON.stringify(planFor(wk).eff) !== before) toast("Pour rester dans le budget, un autre plat de la semaine a été allégé.");
+  if(missing && !missing.length) toast("Tu as déjà tout pour ce plat ✓");
+  else if(missing) toast(`Il te manque juste : ${I[missing[0]][0].toLowerCase()} (~${money(P[missing[0]][2])})`);
+  else if(JSON.stringify(planFor(wk).eff) !== before) toast("Pour rester dans le budget, un autre plat de la semaine a été allégé.");
   rolled = s; renderDay(); renderShop(); renderPrep(); renderRecipes();
 }
 let rolled = null, toastT = null;
@@ -6688,7 +6720,8 @@ function openSwap(s){
       <button class="close" type="button" aria-label="Fermer">×</button></div>
     </div>
     <div class="sheet-body">
-      <button type="button" class="surprise" id="swDice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="12" cy="12" r="1.2"/></svg><span><b>Surprends-moi</b><small>Un plat original au hasard, dans ton budget</small></span></button>
+      <button type="button" class="surprise alt" id="swHave"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6.2"/><path d="M9 20h.01M17 20h.01"/></svg><span><b>Avec ce que j'ai acheté</b><small>Un plat au hasard fait avec ta liste de courses</small></span></button>
+      <button type="button" class="surprise" id="swDice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/><circle cx="12" cy="12" r="1.2"/></svg><span><b>Surprends-moi</b><small>N'importe quel plat original, dans ton budget</small></span></button>
       <input class="search" id="swq" type="search" placeholder="Chercher parmi ${fmt(pool.length)} recettes" autocomplete="off" aria-label="Chercher une recette">
       <div class="opts" id="swl">${sugg.map(opt).join("")}</div>
     </div>`);
@@ -6700,7 +6733,8 @@ function openSwap(s){
     S.choix = {swaps}; save("choix"); sfx("swap"); closeSheet(); renderDay(); renderShop(); renderPrep(); renderRecipes();
   }));
   bind();
-  $("#swDice").addEventListener("click", () => { closeSheet(); diceSlot(s); });
+  $("#swDice").addEventListener("click", () => { closeSheet(); diceSlot(s, "surprise"); });
+  $("#swHave").addEventListener("click", () => { closeSheet(); diceSlot(s, "pantry"); });
   $("#swq").addEventListener("input", e => {
     const q = norm(e.target.value.trim()), words = q.split(/\s+/).filter(Boolean);
     const list = !words.length ? sugg : pool.filter(k => { const n = norm(R[k].name); return words.every(w => n.includes(w)); }).slice(0,30);
